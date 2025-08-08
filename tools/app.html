@@ -3,15 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>超慢跑助手 - 专业版</title>
+    <title>超慢跑助手</title>
     <link rel="stylesheet" href="../styles/app.css">
 </head>
 <body>
-    <div id="app"></div>
+    <div class="app-container">
+        <!-- 顶部标题 -->
+        <div class="app-header">
+            <div class="app-logo">
+                <div class="logo-icon">λ</div>
+            </div>
+            <h1 class="app-title">超慢跑助手</h1>
+            <p class="app-subtitle">科学节拍，健康慢跑</p>
+        </div>
+
+        <!-- 步频控制模块 -->
+        <div class="module-card">
+            <div class="module-header">
+                <span class="module-icon">🎵</span>
+                <span class="module-title">步频控制</span>
+            </div>
+            <div class="bpm-control">
+                <div class="bpm-display-large">
+                    <button class="bpm-btn-large decrease" id="bpm-decrease">-</button>
+                    <div class="bpm-center">
+                        <div class="bpm-value-large" id="bpm-value">180</div>
+                        <div class="bpm-label">步/分钟</div>
+                        <div class="bpm-status">中等强度</div>
+                    </div>
+                    <button class="bpm-btn-large increase" id="bpm-increase">+</button>
+                </div>
+                <div class="bpm-presets">
+                    <button class="preset-btn" data-bpm="170">170</button>
+                    <button class="preset-btn active" data-bpm="180">180</button>
+                    <button class="preset-btn" data-bpm="190">190</button>
+                </div>
+                <div class="bpm-info">
+                    <span class="info-icon">💡</span>
+                    <span>建议步频范围170-190步/分钟</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 节拍器模块 -->
+        <div class="module-card">
+            <div class="module-header">
+                <span class="module-icon">🎵</span>
+                <span class="module-title">节拍器</span>
+            </div>
+            <div class="metronome-control">
+                <div class="metronome-circle" id="metronome-circle">
+                    <div class="metronome-dot"></div>
+                </div>
+                <div class="metronome-bpm" id="metronome-bpm">180</div>
+                <div class="metronome-unit">BPM</div>
+                <div class="metronome-status" id="metronome-status">已停止</div>
+                <button class="metronome-toggle" id="metronome-toggle">
+                    <span class="play-icon">▶</span>
+                </button>
+                <div class="volume-control">
+                    <span class="volume-icon">🔊</span>
+                    <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="65">
+                    <span class="volume-value">65%</span>
+                </div>
+                <div class="sound-options">
+                    <button class="sound-btn active" data-sound="beep">哔哔</button>
+                    <button class="sound-btn" data-sound="tick">滴答</button>
+                    <button class="sound-btn" data-sound="click">点击</button>
+                    <button class="sound-btn" data-sound="bell">铃声</button>
+                    <button class="sound-btn" data-sound="drum">鼓点</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 运动计时模块 -->
+        <div class="module-card">
+            <div class="module-header">
+                <span class="module-icon">⏱️</span>
+                <span class="module-title">运动计时</span>
+            </div>
+            <div class="timer-control">
+                <div class="timer-presets">
+                    <button class="timer-preset-btn" data-time="900">15分钟</button>
+                    <button class="timer-preset-btn" data-time="1200">20分钟</button>
+                    <button class="timer-preset-btn" data-time="1800">30分钟</button>
+                    <button class="timer-preset-btn" data-time="2700">45分钟</button>
+                    <button class="timer-preset-btn" data-time="3600">60分钟</button>
+                    <button class="timer-preset-btn" data-time="7200">120分钟</button>
+                </div>
+                <div class="custom-timer">
+                    <label>自定义时间（分钟）</label>
+                    <input type="number" id="custom-minutes" placeholder="15" min="1" max="999">
+                </div>
+                <button class="start-exercise-btn" id="start-exercise">
+                    <span class="play-icon">▶</span>
+                    开始运动
+                </button>
+                <div class="exercise-info">
+                    <p>🏃‍♂️ 超慢跑是一种轻松的有氧运动</p>
+                    <p>💚 建议心率保持在最大心率的60-70%</p>
+                    <p>⏰ 每次运动建议15-60分钟</p>
+                    <p>🌟 坚持每周3-5次，效果更佳</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 运动统计模块 -->
+        <div class="module-card">
+            <div class="module-header">
+                <span class="module-icon">📊</span>
+                <span class="module-title">运动统计</span>
+            </div>
+            <div class="stats-overview">
+                <div class="stats-summary">
+                    <div class="stat-item large">
+                        <div class="stat-value" id="total-distance">15000</div>
+                        <div class="stat-label">累计距离(米)</div>
+                        <div class="stat-sublabel">本月目标</div>
+                    </div>
+                    <div class="stat-item large">
+                        <div class="stat-value" id="total-calories">2700</div>
+                        <div class="stat-label">消耗卡路里</div>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-sessions">6</div>
+                        <div class="stat-text">运动次数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-time">34:58</div>
+                        <div class="stat-text">运动总时长</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-steps">6738</div>
+                        <div class="stat-text">总步数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="avg-bpm">180</div>
+                        <div class="stat-text">平均步频</div>
+                    </div>
+                </div>
+                <div class="recent-records">
+                    <h4>最近记录</h4>
+                    <div class="record-list" id="record-list">
+                        <div class="record-item">
+                            <div class="record-date">8月8日 08:34</div>
+                            <div class="record-details">
+                                <span class="record-duration">15:00</span>
+                                <span class="record-type">慢跑 · 中等强度</span>
+                            </div>
+                        </div>
+                        <div class="record-item">
+                            <div class="record-date">8月7日 20:30</div>
+                            <div class="record-details">
+                                <span class="record-duration">16:27</span>
+                            </div>
+                        </div>
+                        <div class="record-item">
+                            <div class="record-date">8月7日 17:28</div>
+                            <div class="record-details">
+                                <span class="record-duration">6:14</span>
+                            </div>
+                        </div>
+                        <div class="record-item">
+                            <div class="record-date">8月7日 17:06</div>
+                            <div class="record-details">
+                                <span class="record-duration">5:52</span>
+                                <span class="record-type">慢跑 · 轻度有氧</span>
+                            </div>
+                        </div>
+                        <div class="record-item">
+                            <div class="record-date">8月7日 12:31</div>
+                            <div class="record-details">
+                                <span class="record-duration">6:14</span>
+                                <span class="record-type">慢跑 · 中等强度</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部信息 -->
+        <div class="app-footer">
+            <p>超慢跑 · 让健康生活更简单</p>
+        </div>
+    </div>
+
+    <!-- 运动进行中的浮层 -->
+    <div class="exercise-overlay" id="exercise-overlay" style="display: none;">
+        <div class="exercise-content">
+            <div class="exercise-timer">
+                <div class="timer-display" id="exercise-timer-display">15:00</div>
+                <div class="timer-label">剩余时间</div>
+            </div>
+            <div class="exercise-stats">
+                <div class="exercise-stat">
+                    <span class="stat-label">当前步频</span>
+                    <span class="stat-value" id="current-bpm">180</span>
+                </div>
+                <div class="exercise-stat">
+                    <span class="stat-label">已用时间</span>
+                    <span class="stat-value" id="elapsed-time">00:00</span>
+                </div>
+                <div class="exercise-stat">
+                    <span class="stat-label">预计步数</span>
+                    <span class="stat-value" id="estimated-steps">0</span>
+                </div>
+            </div>
+            <div class="exercise-controls">
+                <button class="exercise-btn pause" id="pause-exercise">暂停</button>
+                <button class="exercise-btn stop" id="stop-exercise">结束</button>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/app.js"></script>
-    <script>
-        // 初始化应用
-        const app = new SuperSlowRunApp();
-    </script>
 </body>
 </html>
