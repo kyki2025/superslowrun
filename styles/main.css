@@ -163,7 +163,7 @@ body {
 
 .hero-stats {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin-bottom: 2.5rem;
 }
 
@@ -171,17 +171,18 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: white;
     padding: 1.5rem 2.5rem;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     transform: translateY(0);
     transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
 }
 
 .free-tools-banner:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .free-icon {
@@ -198,13 +199,12 @@ body {
 .free-title {
     font-size: 1.4rem;
     font-weight: 700;
-    color: white;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: var(--text-primary);
 }
 
 .free-subtitle {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-secondary);
     font-weight: 400;
 }
 
