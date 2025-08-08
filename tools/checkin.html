@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>超慢跑打卡记录 - 坚持每一天</title>
+    <meta name="description" content="记录您的超慢跑打卡，坚持每一天的运动习惯。">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/checkin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="../index.html"><h2>超慢跑</h2></a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">首页</a></li>
+                <li><a href="../index.html#tools" class="nav-link">工具</a></li>
+                <li><a href="../blog.html" class="nav-link">博客</a></li>
+                <li><a href="../index.html#about" class="nav-link">关于</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="checkin-main">
+        <div class="container">
+            <div class="checkin-header">
+                <h1>超慢跑打卡记录</h1>
+                <p>记录每一天的坚持，见证自己的成长</p>
+            </div>
+
+            <!-- 统计卡片 -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="currentStreak">0</div>
+                        <div class="stat-label">连续打卡</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="monthTotal">0</div>
+                        <div class="stat-label">本月打卡</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="totalTime">0</div>
+                        <div class="stat-label">总时长(分钟)</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏃</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="totalDays">0</div>
+                        <div class="stat-label">累计天数</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 月份导航 -->
+            <div class="month-navigation">
+                <button class="nav-btn" id="prevMonth">
+                    <span>‹</span>
+                </button>
+                <div class="current-month">
+                    <h2 id="currentMonthYear">2024年1月</h2>
+                </div>
+                <button class="nav-btn" id="nextMonth">
+                    <span>›</span>
+                </button>
+            </div>
+
+            <!-- 日历视图 -->
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <div class="day-label">日</div>
+                    <div class="day-label">一</div>
+                    <div class="day-label">二</div>
+                    <div class="day-label">三</div>
+                    <div class="day-label">四</div>
+                    <div class="day-label">五</div>
+                    <div class="day-label">六</div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- 日历格子将通过JavaScript动态生成 -->
+                </div>
+            </div>
+
+            <!-- 今日打卡区域 -->
+            <div class="today-checkin" id="todayCheckin">
+                <div class="checkin-card">
+                    <h3>今日打卡</h3>
+                    <div class="checkin-form" id="checkinForm">
+                        <div class="form-group">
+                            <label for="duration">运动时长 (分钟)</label>
+                            <input type="number" id="duration" min="1" max="300" placeholder="请输入运动时长">
+                        </div>
+                        <div class="form-group">
+                            <label for="feeling">运动感受</label>
+                            <select id="feeling">
+                                <option value="">选择感受</option>
+                                <option value="excellent">😄 非常棒</option>
+                                <option value="good">😊 感觉良好</option>
+                                <option value="normal">😐 一般般</option>
+                                <option value="tired">😓 有点累</option>
+                                <option value="hard">😰 很辛苦</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">备注 (可选)</label>
+                            <textarea id="notes" placeholder="记录今天的运动心得..."></textarea>
+                        </div>
+                        <button class="checkin-btn" id="checkinBtn">
+                            <span class="btn-icon">✓</span>
+                            完成打卡
+                        </button>
+                    </div>
+                    <div class="checkin-success" id="checkinSuccess" style="display: none;">
+                        <div class="success-icon">🎉</div>
+                        <h4>打卡成功！</h4>
+                        <p>今天的运动已记录，继续保持！</p>
+                        <button class="edit-btn" id="editBtn">修改记录</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 打卡详情弹窗 -->
+            <div class="modal-overlay" id="modalOverlay" style="display: none;">
+                <div class="modal">
+                    <div class="modal-header">
+                        <h3 id="modalTitle">打卡详情</h3>
+                        <button class="close-btn" id="closeModal">&times;</button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                        <!-- 详情内容将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/checkin.js"></script>
+</body>
+</html>
