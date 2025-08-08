@@ -1,0 +1,485 @@
+/* 节拍器专用样式 */
+.metronome-main {
+    padding-top: 90px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.metronome-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.metronome-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.metronome-header p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+
+.metronome-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 4rem;
+}
+
+/* 节拍器显示区域 */
+.metronome-display {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: var(--shadow-xl);
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.bpm-display {
+    margin-bottom: 2rem;
+}
+
+.bpm-number {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    display: block;
+}
+
+.bpm-label {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.metronome-visual {
+    position: relative;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.pendulum-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin-bottom: 2rem;
+}
+
+.pendulum {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 100px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    transform-origin: top center;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+}
+
+.pendulum::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+}
+
+.pendulum::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 30px;
+    background: var(--secondary-color);
+    border-radius: 50%;
+}
+
+.beat-indicator {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    opacity: 0.3;
+    transition: all 0.1s ease;
+}
+
+.beat-indicator.active {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* 控制面板 */
+.control-panel {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border-color);
+}
+
+.control-group {
+    margin-bottom: 2rem;
+}
+
+.control-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.slider-container {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--bg-secondary);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    cursor: pointer;
+    border: none;
+    box-shadow: var(--shadow-md);
+}
+
+.slider-marks {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.bpm-presets,
+.timer-presets {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.preset-btn,
+.timer-preset {
+    padding: 8px 16px;
+    border: 2px solid var(--border-color);
+    background: white;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.preset-btn:hover,
+.timer-preset:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.preset-btn.active,
+.timer-preset.active {
+    background: var(--gradient-primary);
+    color: white;
+    border-color: transparent;
+}
+
+.sound-select,
+.timer-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    transition: border-color 0.3s ease;
+}
+
+.sound-select:focus,
+.timer-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.timer-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.timer-input {
+    max-width: 150px;
+}
+
+/* 主控制按钮 */
+.main-controls {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.control-btn {
+    flex: 1;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.control-btn.primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.control-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.control-btn.secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+}
+
+.control-btn.secondary:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+}
+
+/* 计时器显示 */
+.timer-display {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.time-remaining {
+    margin-bottom: 1rem;
+}
+
+.time-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.time-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+/* 使用指南 */
+.usage-guide {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    margin-bottom: 3rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.usage-guide h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+}
+
+.guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.guide-item {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: var(--bg-secondary);
+    transition: transform 0.3s ease;
+}
+
+.guide-item:hover {
+    transform: translateY(-5px);
+}
+
+.guide-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.guide-item h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.guide-item p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* 训练建议 */
+.training-tips {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.training-tips h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+}
+
+.tips-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.tip-item {
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-color);
+    line-height: 1.6;
+}
+
+.tip-item strong {
+    color: var(--primary-color);
+}
+
+/* 动画效果 */
+.pendulum.swing-left {
+    transform: translate(-50%, -50%) rotate(-30deg);
+}
+
+.pendulum.swing-right {
+    transform: translate(-50%, -50%) rotate(30deg);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .metronome-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .metronome-display,
+    .control-panel {
+        padding: 2rem;
+    }
+    
+    .bpm-number {
+        font-size: 3rem;
+    }
+    
+    .main-controls {
+        flex-direction: column;
+    }
+    
+    .guide-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .bpm-presets,
+    .timer-presets {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .metronome-header h1 {
+        font-size: 2rem;
+    }
+    
+    .pendulum-container {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .metronome-visual {
+        height: 250px;
+    }
+    
+    .usage-guide,
+    .training-tips {
+        padding: 2rem;
+    }
+}

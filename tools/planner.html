@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>训练计划生成器 - 个性化超慢跑方案</title>
+    <meta name="description" content="根据个人情况生成专属的超慢跑训练计划，科学安排训练强度和时间。">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/planner.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="../index.html"><h2>超慢跑</h2></a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">首页</a></li>
+                <li><a href="../index.html#tools" class="nav-link">工具</a></li>
+                <li><a href="../blog.html" class="nav-link">博客</a></li>
+                <li><a href="../index.html#about" class="nav-link">关于</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="planner-main">
+        <div class="container">
+            <div class="planner-header">
+                <h1>训练计划生成器</h1>
+                <p>个性化定制，科学训练方案</p>
+            </div>
+
+            <!-- 步骤指示器 -->
+            <div class="steps-indicator">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">基本信息</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">运动经验</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">目标设定</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-label">生成计划</div>
+                </div>
+            </div>
+
+            <!-- 表单容器 -->
+            <div class="form-container">
+                <!-- 步骤1: 基本信息 -->
+                <div class="form-step active" id="step1">
+                    <div class="step-content">
+                        <h2>基本信息</h2>
+                        <p>请填写您的基本信息，帮助我们制定更适合的训练计划</p>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="age">年龄</label>
+                                <input type="number" id="age" min="16" max="80" placeholder="请输入年龄">
+                                <span class="form-hint">16-80岁</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="gender">性别</label>
+                                <select id="gender">
+                                    <option value="">请选择</option>
+                                    <option value="male">男性</option>
+                                    <option value="female">女性</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="height">身高 (cm)</label>
+                                <input type="number" id="height" min="140" max="220" placeholder="请输入身高">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="weight">体重 (kg)</label>
+                                <input type="number" id="weight" min="40" max="150" placeholder="请输入体重">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>健康状况</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="health-normal" checked>
+                                    <span class="checkmark"></span>
+                                    身体健康，无运动限制
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="health-joint">
+                                    <span class="checkmark"></span>
+                                    关节问题（膝盖、脚踝等）
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="health-heart">
+                                    <span class="checkmark"></span>
+                                    心血管疾病
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="health-other">
+                                    <span class="checkmark"></span>
+                                    其他慢性疾病
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 步骤2: 运动经验 -->
+                <div class="form-step" id="step2">
+                    <div class="step-content">
+                        <h2>运动经验</h2>
+                        <p>了解您的运动背景，制定合适的起始强度</p>
+                        
+                        <div class="form-group">
+                            <label>当前运动频率</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="exercise-frequency" value="none">
+                                    <span class="radio-mark"></span>
+                                    几乎不运动
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="exercise-frequency" value="occasional">
+                                    <span class="radio-mark"></span>
+                                    偶尔运动（每月1-2次）
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="exercise-frequency" value="regular">
+                                    <span class="radio-mark"></span>
+                                    定期运动（每周1-2次）
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="exercise-frequency" value="frequent">
+                                    <span class="radio-mark"></span>
+                                    经常运动（每周3次以上）
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>跑步经验</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="running-experience" value="beginner">
+                                    <span class="radio-mark"></span>
+                                    初学者（很少跑步）
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="running-experience" value="intermediate">
+                                    <span class="radio-mark"></span>
+                                    有一定经验（能跑30分钟）
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="running-experience" value="advanced">
+                                    <span class="radio-mark"></span>
+                                    经验丰富（能跑1小时以上）
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="available-time">每周可用训练时间</label>
+                            <select id="available-time">
+                                <option value="">请选择</option>
+                                <option value="2-3">2-3小时</option>
+                                <option value="3-5">3-5小时</option>
+                                <option value="5-7">5-7小时</option>
+                                <option value="7+">7小时以上</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>偏好的训练时间</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="time-morning">
+                                    <span class="checkmark"></span>
+                                    早晨 (6:00-9:00)
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="time-afternoon">
+                                    <span class="checkmark"></span>
+                                    下午 (14:00-17:00)
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="time-evening">
+                                    <span class="checkmark"></span>
+                                    傍晚 (17:00-20:00)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 步骤3: 目标设定 -->
+                <div class="form-step" id="step3">
+                    <div class="step-content">
+                        <h2>目标设定</h2>
+                        <p>明确您的训练目标，制定针对性计划</p>
+                        
+                        <div class="form-group">
+                            <label>主要目标</label>
+                            <div class="goal-cards">
+                                <div class="goal-card" data-goal="weight-loss">
+                                    <div class="goal-icon">🔥</div>
+                                    <h3>减重塑形</h3>
+                                    <p>燃烧脂肪，改善体型</p>
+                                </div>
+                                <div class="goal-card" data-goal="health">
+                                    <div class="goal-icon">❤️</div>
+                                    <h3>健康养生</h3>
+                                    <p>增强体质，预防疾病</p>
+                                </div>
+                                <div class="goal-card" data-goal="endurance">
+                                    <div class="goal-icon">💪</div>
+                                    <h3>提升耐力</h3>
+                                    <p>增强心肺功能</p>
+                                </div>
+                                <div class="goal-card" data-goal="stress-relief">
+                                    <div class="goal-icon">🧘</div>
+                                    <h3>减压放松</h3>
+                                    <p>缓解压力，改善心情</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="target-weight">目标体重 (kg) - 可选</label>
+                            <input type="number" id="target-weight" min="40" max="150" placeholder="如有减重目标请填写">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="plan-duration">计划周期</label>
+                            <select id="plan-duration">
+                                <option value="">请选择</option>
+                                <option value="4">4周入门计划</option>
+                                <option value="8">8周进阶计划</option>
+                                <option value="12">12周完整计划</option>
+                                <option value="16">16周长期计划</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="intensity-preference">强度偏好</label>
+                            <div class="intensity-slider">
+                                <input type="range" id="intensity-preference" min="1" max="5" value="3">
+                                <div class="intensity-labels">
+                                    <span>轻松</span>
+                                    <span>适中</span>
+                                    <span>挑战</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 步骤4: 生成计划 -->
+                <div class="form-step" id="step4">
+                    <div class="step-content">
+                        <div class="plan-generation">
+                            <div class="generation-status" id="generationStatus">
+                                <div class="loading-spinner"></div>
+                                <h3>正在生成您的专属训练计划...</h3>
+                                <p>请稍候，我们正在根据您的信息制定最适合的方案</p>
+                            </div>
+                            
+                            <div class="generated-plan" id="generatedPlan" style="display: none;">
+                                <!-- 计划内容将通过JavaScript动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 导航按钮 -->
+                <div class="form-navigation">
+                    <button type="button" id="prevBtn" class="nav-btn secondary" style="display: none;">上一步</button>
+                    <button type="button" id="nextBtn" class="nav-btn primary">下一步</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/planner.js"></script>
+</body>
+</html>

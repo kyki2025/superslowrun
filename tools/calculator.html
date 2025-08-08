@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡路里计算器 - 超慢跑</title>
+    <meta name="description" content="精确计算超慢跑运动消耗的卡路里，帮助制定合理的健身目标">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/calculator.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="../index.html"><h2>超慢跑</h2></a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">首页</a></li>
+                <li><a href="../index.html#tools" class="nav-link">工具</a></li>
+                <li><a href="../index.html#blog" class="nav-link">博客</a></li>
+                <li><a href="../index.html#about" class="nav-link">关于</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="calculator-main">
+        <div class="container">
+            <!-- 页面标题 -->
+            <div class="calculator-header">
+                <h1>卡路里计算器</h1>
+                <p>精确计算您的超慢跑运动消耗</p>
+            </div>
+
+            <div class="calculator-container">
+                <!-- 输入面板 -->
+                <div class="input-panel">
+                    <h2>基本信息</h2>
+                    
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="weight">体重 (kg)</label>
+                            <input type="number" id="weight" min="30" max="200" step="0.1" placeholder="请输入体重">
+                            <span class="input-hint">准确的体重有助于精确计算</span>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="age">年龄</label>
+                            <input type="number" id="age" min="16" max="80" placeholder="请输入年龄">
+                            <span class="input-hint">年龄影响基础代谢率</span>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="gender">性别</label>
+                            <select id="gender">
+                                <option value="">请选择性别</option>
+                                <option value="male">男性</option>
+                                <option value="female">女性</option>
+                            </select>
+                            <span class="input-hint">男女代谢率存在差异</span>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="height">身高 (cm)</label>
+                            <input type="number" id="height" min="140" max="220" placeholder="请输入身高">
+                            <span class="input-hint">用于计算BMI和代谢率</span>
+                        </div>
+                    </div>
+
+                    <h3>运动参数</h3>
+                    
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="duration">运动时长 (分钟)</label>
+                            <input type="number" id="duration" min="1" max="300" placeholder="请输入运动时长">
+                            <span class="input-hint">实际运动时间</span>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="intensity">运动强度</label>
+                            <select id="intensity">
+                                <option value="">请选择强度</option>
+                                <option value="light">轻度 (3-4 METs)</option>
+                                <option value="moderate">中度 (4-5 METs)</option>
+                                <option value="vigorous">高强度 (5-6 METs)</option>
+                            </select>
+                            <span class="input-hint">超慢跑通常为轻度到中度</span>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="terrain">地形类型</label>
+                            <select id="terrain">
+                                <option value="flat">平地</option>
+                                <option value="slight-incline">轻微坡度</option>
+                                <option value="moderate-incline">中等坡度</option>
+                                <option value="steep-incline">陡坡</option>
+                            </select>
+                            <span class="input-hint">地形影响消耗量</span>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="temperature">环境温度</label>
+                            <select id="temperature">
+                                <option value="normal">适宜 (15-25°C)</option>
+                                <option value="cold">寒冷 (<15°C)</option>
+                                <option value="hot">炎热 (>25°C)</option>
+                            </select>
+                            <span class="input-hint">温度影响代谢效率</span>
+                        </div>
+                    </div>
+
+                    <div class="calculate-section">
+                        <button id="calculateBtn" class="calculate-btn">
+                            <span class="btn-icon">🔥</span>
+                            计算卡路里消耗
+                        </button>
+                        <button id="resetBtn" class="reset-btn">重置</button>
+                    </div>
+                </div>
+
+                <!-- 结果面板 -->
+                <div class="result-panel" id="resultPanel">
+                    <h2>计算结果</h2>
+                    
+                    <div class="result-main">
+                        <div class="calorie-display">
+                            <div class="calorie-number" id="calorieNumber">0</div>
+                            <div class="calorie-unit">千卡 (kcal)</div>
+                        </div>
+                        
+                        <div class="result-breakdown">
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">基础代谢消耗</span>
+                                <span class="breakdown-value" id="bmrCalories">0 kcal</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">运动额外消耗</span>
+                                <span class="breakdown-value" id="exerciseCalories">0 kcal</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">每分钟消耗</span>
+                                <span class="breakdown-value" id="perMinuteCalories">0 kcal/min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="comparison-section">
+                        <h3>食物对比</h3>
+                        <div class="food-comparisons" id="foodComparisons">
+                            <!-- 动态生成食物对比 -->
+                        </div>
+                    </div>
+
+                    <div class="insights-section">
+                        <h3>健康洞察</h3>
+                        <div class="insights-list" id="insightsList">
+                            <!-- 动态生成健康建议 -->
+                        </div>
+                    </div>
+
+                    <div class="chart-section">
+                        <h3>消耗趋势</h3>
+                        <canvas id="calorieChart" width="400" height="200"></canvas>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn save-btn" onclick="saveResult()">
+                            📊 保存记录
+                        </button>
+                        <button class="action-btn share-btn" onclick="shareResult()">
+                            📤 分享结果
+                        </button>
+                        <button class="action-btn history-btn" onclick="showHistory()">
+                            📈 查看历史
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 历史记录面板 -->
+            <div class="history-panel" id="historyPanel" style="display: none;">
+                <div class="history-header">
+                    <h2>运动记录</h2>
+                    <button class="close-history" onclick="closeHistory()">✕</button>
+                </div>
+                <div class="history-content" id="historyContent">
+                    <!-- 动态生成历史记录 -->
+                </div>
+            </div>
+
+            <!-- 信息卡片 -->
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="info-icon">💡</div>
+                    <h3>计算原理</h3>
+                    <p>基于METs（代谢当量）和Harris-Benedict公式，结合个人体重、年龄、性别等因素精确计算卡路里消耗。</p>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">🎯</div>
+                    <h3>使用建议</h3>
+                    <p>建议配合心率监测设备使用，定期记录运动数据，有助于制定更科学的训练计划。</p>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">📊</div>
+                    <h3>数据准确性</h3>
+                    <p>计算结果仅供参考，实际消耗可能因个体差异而有所不同。建议结合专业设备进行验证。</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>超慢跑</h3>
+                    <p>让健康生活变得简单而有趣</p>
+                </div>
+                <div class="footer-section">
+                    <h4>工具导航</h4>
+                    <ul>
+                        <li><a href="metronome.html">节拍器</a></li>
+                        <li><a href="planner.html">训练计划</a></li>
+                        <li><a href="calculator.html">卡路里计算</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>快速链接</h4>
+                    <ul>
+                        <li><a href="../index.html">返回首页</a></li>
+                        <li><a href="../index.html#about">了解超慢跑</a></li>
+                        <li><a href="../privacy.html">隐私政策</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 超慢跑. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/calculator.js"></script>
+</body>
+</html>
