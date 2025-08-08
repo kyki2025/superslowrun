@@ -1,0 +1,23 @@
+{
+  "name": "superslowrun",
+  "version": "1.0.0",
+  "description": "超慢跑运动网站 - 专业的超慢跑工具和资源平台",
+  "main": "index.html",
+  "scripts": {
+    "deploy": "npx wrangler deploy --assets=.",
+    "dev": "npx wrangler dev --assets=.",
+    "preview": "npx wrangler deploy --assets=. --dry-run"
+  },
+  "keywords": [
+    "超慢跑",
+    "运动",
+    "健康",
+    "跑步",
+    "fitness"
+  ],
+  "author": "SuperSlowRun Team",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^4.28.1"
+  }
+}
