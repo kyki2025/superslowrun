@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 预加载关键资源
     const preloadLinks = [
-        'tools/metronome.html',
+        'tools/app.html',
         'tools/planner.html',
         'tools/calculator.html'
     ];

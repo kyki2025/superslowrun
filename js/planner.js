@@ -7,6 +7,9 @@ class TrainingPlanner {
         this.initializeElements();
         this.bindEvents();
         this.updateStepDisplay();
+        
+        // 页面加载时检查是否有保存的计划
+        this.checkSavedPlan();
     }
 
     initializeElements() {
@@ -323,6 +326,9 @@ class TrainingPlanner {
         // 生成计划内容
         const planContent = this.createPlanContent();
         
+        // 保存计划到本地存储
+        this.savePlanToStorage();
+        
         // 显示生成的计划
         this.generationStatus.style.display = 'none';
         this.generatedPlan.innerHTML = planContent;
@@ -378,6 +384,7 @@ class TrainingPlanner {
                 </div>
                 <p><strong>BMI指数：</strong>${bmi} ${this.getBMICategory(bmi)}</p>
                 <p><strong>训练目标：</strong>${this.getGoalDescription(data.goal)}</p>
+                <p><strong>生成时间：</strong>${new Date().toLocaleDateString('zh-CN')}</p>
             </div>
             
             ${this.generateWeeklySchedule(trainingParams)}
@@ -401,6 +408,9 @@ class TrainingPlanner {
                 </button>
                 <button class="action-btn restart" onclick="planner.restartPlanner()">
                     🔄 重新制定
+                </button>
+                <button class="action-btn view-saved" onclick="planner.showSavedPlanInfo()">
+                    💾 查看保存信息
                 </button>
             </div>
         `;
@@ -572,6 +582,183 @@ class TrainingPlanner {
         return descriptions[goal] || '全面健康提升';
     }
 
+    // 保存计划到本地存储
+    savePlanToStorage() {
+        const planData = {
+            formData: this.formData,
+            generatedAt: new Date().toISOString(),
+            planContent: this.createPlanContent()
+        };
+        localStorage.setItem('superslowrun_training_plan', JSON.stringify(planData));
+        console.log('训练计划已保存到本地存储');
+    }
+
+    // 从本地存储加载计划
+    loadPlanFromStorage() {
+        const savedPlan = localStorage.getItem('superslowrun_training_plan');
+        if (savedPlan) {
+            try {
+                const planData = JSON.parse(savedPlan);
+                // 检查计划是否在30天内生成（避免过期计划）
+                const generatedDate = new Date(planData.generatedAt);
+                const now = new Date();
+                const daysDiff = (now - generatedDate) / (1000 * 60 * 60 * 24);
+                
+                if (daysDiff <= 30) {
+                    return planData;
+                } else {
+                    // 删除过期计划
+                    localStorage.removeItem('superslowrun_training_plan');
+                    return null;
+                }
+            } catch (error) {
+                console.error('加载保存的计划时出错:', error);
+                return null;
+            }
+        }
+        return null;
+    }
+
+    // 检查是否有保存的计划
+    checkSavedPlan() {
+        const savedPlan = this.loadPlanFromStorage();
+        if (savedPlan) {
+            // 显示加载保存计划的选项
+            this.showSavedPlanOption(savedPlan);
+        }
+    }
+
+    // 显示保存计划选项
+    showSavedPlanOption(savedPlan) {
+        const generatedDate = new Date(savedPlan.generatedAt).toLocaleDateString('zh-CN');
+        const notification = document.createElement('div');
+        notification.className = 'saved-plan-notification';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <h4>发现已保存的训练计划</h4>
+                <p>生成时间: ${generatedDate}</p>
+                <div class="notification-actions">
+                    <button class="btn-load" onclick="planner.loadSavedPlan()">加载计划</button>
+                    <button class="btn-new" onclick="planner.dismissNotification()">制定新计划</button>
+                </div>
+            </div>
+        `;
+        
+        // 添加样式
+        const style = document.createElement('style');
+        style.textContent = `
+            .saved-plan-notification {
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: white;
+                border: 2px solid var(--primary-color);
+                border-radius: 12px;
+                padding: 1.5rem;
+                box-shadow: var(--shadow-xl);
+                z-index: 1000;
+                max-width: 300px;
+                animation: slideIn 0.3s ease;
+            }
+            
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            .notification-content h4 {
+                margin-bottom: 0.5rem;
+                color: var(--text-primary);
+            }
+            
+            .notification-content p {
+                margin-bottom: 1rem;
+                color: var(--text-secondary);
+                font-size: 0.9rem;
+            }
+            
+            .notification-actions {
+                display: flex;
+                gap: 0.5rem;
+            }
+            
+            .notification-actions button {
+                flex: 1;
+                padding: 0.5rem;
+                border: none;
+                border-radius: 6px;
+                font-size: 0.9rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .btn-load {
+                background: var(--primary-color);
+                color: white;
+            }
+            
+            .btn-new {
+                background: var(--bg-secondary);
+                color: var(--text-primary);
+            }
+            
+            .notification-actions button:hover {
+                transform: translateY(-1px);
+            }
+        `;
+        document.head.appendChild(style);
+        
+        document.body.appendChild(notification);
+        
+        // 5秒后自动消失
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+
+    // 加载保存的计划
+    loadSavedPlan() {
+        const savedPlan = this.loadPlanFromStorage();
+        if (savedPlan) {
+            // 跳转到第4步并显示计划
+            this.currentStep = 4;
+            this.formData = savedPlan.formData;
+            this.updateStepDisplay();
+            
+            // 显示保存的计划
+            this.generationStatus.style.display = 'none';
+            this.generatedPlan.innerHTML = savedPlan.planContent;
+            this.generatedPlan.style.display = 'block';
+            
+            // 绑定计划操作事件
+            this.bindPlanActions();
+            
+            // 移除通知
+            this.dismissNotification();
+        }
+    }
+
+    // 关闭通知
+    dismissNotification() {
+        const notification = document.querySelector('.saved-plan-notification');
+        if (notification) {
+            notification.remove();
+        }
+    }
+
+    // 显示保存信息
+    showSavedPlanInfo() {
+        const savedPlan = this.loadPlanFromStorage();
+        if (savedPlan) {
+            const generatedDate = new Date(savedPlan.generatedAt).toLocaleString('zh-CN');
+            alert(`训练计划保存信息：\n生成时间: ${generatedDate}\n\n计划会自动保存30天，之后需要重新制定。`);
+        } else {
+            alert('当前没有保存的训练计划。');
+        }
+    }
+
     bindPlanActions() {
         // 分享功能
         window.planner = this;
@@ -596,6 +783,9 @@ class TrainingPlanner {
         if (confirm('确定要重新制定训练计划吗？当前进度将会丢失。')) {
             this.currentStep = 1;
             this.formData = {};
+            
+            // 清除保存的计划
+            localStorage.removeItem('superslowrun_training_plan');
             
             // 重置表单
             document.querySelectorAll('input, select').forEach(element => {
