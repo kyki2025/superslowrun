@@ -13,8 +13,14 @@ window.addEventListener('scroll', () => {
 // 平滑滚动到锚点
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        // 跳过空的锚点链接
+        if (href === '#' || !href) {
+            return;
+        }
+        
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const target = document.querySelector(href);
         if (target) {
             const offsetTop = target.offsetTop - 70; // 考虑导航栏高度
             window.scrollTo({
@@ -151,6 +157,125 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// 博客配置
+const BLOG_CONFIG = {
+    // 您可以在这里设置外部博客网站的URL
+    blogUrl: 'https://your-blog-website.com',
+    // RSS或API端点用于获取文章列表
+    apiEndpoint: 'https://your-blog-website.com/api/posts',
+    // 备用静态文章数据
+    fallbackArticles: [
+        {
+            title: '超慢跑初学者完整指南',
+            excerpt: '从零开始学习超慢跑，掌握正确的姿势和呼吸方法...',
+            date: '2025-01-15',
+            readTime: '5分钟阅读',
+            category: '训练技巧'
+        },
+        {
+            title: '超慢跑前后的营养补充',
+            excerpt: '科学的营养搭配让你的训练效果事半功倍...',
+            date: '2025-01-12',
+            readTime: '3分钟阅读',
+            category: '营养建议'
+        },
+        {
+            title: '30天超慢跑挑战成功案例',
+            excerpt: '真实用户分享他们的超慢跑转变之旅...',
+            date: '2025-01-10',
+            readTime: '7分钟阅读',
+            category: '成功案例'
+        }
+    ]
+};
+
+// 博客跳转功能
+function setupBlogNavigation() {
+    const blogNavLink = document.getElementById('blogNavLink');
+    const blogFooterLink = document.getElementById('blogFooterLink');
+    const viewAllArticles = document.getElementById('viewAllArticles');
+    
+    const handleBlogClick = (e) => {
+        e.preventDefault();
+        // 暂时禁用跳转，因为外部博客网站还未准备好
+        // window.open(BLOG_CONFIG.blogUrl, '_blank');
+    };
+    
+    if (blogNavLink) {
+        blogNavLink.addEventListener('click', handleBlogClick);
+    }
+    
+    if (blogFooterLink) {
+        blogFooterLink.addEventListener('click', handleBlogClick);
+    }
+    
+    if (viewAllArticles) {
+        viewAllArticles.addEventListener('click', handleBlogClick);
+    }
+}
+
+// 获取最新文章
+async function fetchLatestArticles() {
+    try {
+        // 尝试从API获取文章
+        const response = await fetch(BLOG_CONFIG.apiEndpoint);
+        if (response.ok) {
+            const articles = await response.json();
+            return articles.slice(0, 3); // 只取前3篇
+        }
+    } catch (error) {
+        console.log('无法获取远程文章，使用备用数据:', error);
+    }
+    
+    // 如果API失败，使用备用数据
+    return BLOG_CONFIG.fallbackArticles;
+}
+
+// 更新首页文章显示
+async function updateBlogSection() {
+    const blogGrid = document.querySelector('.blog-grid');
+    if (!blogGrid) return;
+    
+    try {
+        const articles = await fetchLatestArticles();
+        
+        // 清空现有内容
+        blogGrid.innerHTML = '';
+        
+        // 生成文章卡片
+        articles.forEach((article, index) => {
+            const articleCard = document.createElement('article');
+            articleCard.className = 'blog-card';
+            
+            articleCard.innerHTML = `
+                <div class="blog-image">
+                    <div class="blog-placeholder"></div>
+                </div>
+                <div class="blog-content">
+                    <span class="blog-category">${article.category}</span>
+                    <h3>${article.title}</h3>
+                    <p>${article.excerpt}</p>
+                    <div class="blog-meta">
+                        <span class="blog-date">${article.date}</span>
+                        <span class="blog-read">${article.readTime}</span>
+                    </div>
+                </div>
+            `;
+            
+            // 暂时禁用点击跳转，因为外部博客网站还未准备好
+            // articleCard.addEventListener('click', () => {
+            //     window.open(BLOG_CONFIG.blogUrl, '_blank');
+            // });
+            
+            // articleCard.style.cursor = 'pointer';
+            blogGrid.appendChild(articleCard);
+        });
+        
+    } catch (error) {
+        console.error('更新博客区域失败:', error);
+    }
+}
+
 // 页面加载完成后的初始化
 document.addEventListener('DOMContentLoaded', () => {
     // 添加页面加载动画
@@ -160,6 +285,12 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         document.body.style.opacity = '1';
     }, 100);
+    
+    // 设置博客导航
+    setupBlogNavigation();
+    
+    // 更新博客文章
+    updateBlogSection();
     
     // 预加载关键资源
     const preloadLinks = [
