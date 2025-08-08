@@ -7,6 +7,7 @@
     <meta name="description" content="记录您的超慢跑打卡，坚持每一天的运动习惯。">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/checkin.css">
+    <link rel="stylesheet" href="../styles/i18n.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -17,10 +18,10 @@
                 <a href="../index.html"><h2>超慢跑</h2></a>
             </div>
             <ul class="nav-menu">
-                <li><a href="../index.html" class="nav-link">首页</a></li>
-                <li><a href="../index.html#tools" class="nav-link">工具</a></li>
-                <li><a href="../blog.html" class="nav-link">博客</a></li>
-                <li><a href="../index.html#about" class="nav-link">关于</a></li>
+                <li><a href="../index.html" class="nav-link" data-i18n="nav.home">首页</a></li>
+                <li><a href="../index.html#tools" class="nav-link" data-i18n="nav.tools">工具</a></li>
+                <li><a href="../blog.html" class="nav-link" data-i18n="nav.blog">博客</a></li>
+                <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">关于</a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -34,8 +35,8 @@
     <main class="checkin-main">
         <div class="container">
             <div class="checkin-header">
-                <h1>超慢跑打卡记录</h1>
-                <p>记录每一天的坚持，见证自己的成长</p>
+                <h1 data-i18n="checkin.title">超慢跑打卡记录</h1>
+                <p data-i18n="checkin.subtitle">记录每一天的坚持，见证自己的成长</p>
             </div>
 
             <!-- 统计卡片 -->
@@ -44,28 +45,28 @@
                     <div class="stat-icon">🔥</div>
                     <div class="stat-info">
                         <div class="stat-number" id="currentStreak">0</div>
-                        <div class="stat-label">连续打卡</div>
+                        <div class="stat-label" data-i18n="checkin.stats.streak">连续打卡</div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">📅</div>
                     <div class="stat-info">
                         <div class="stat-number" id="monthTotal">0</div>
-                        <div class="stat-label">本月打卡</div>
+                        <div class="stat-label" data-i18n="checkin.stats.month">本月打卡</div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">⏱️</div>
                     <div class="stat-info">
                         <div class="stat-number" id="totalTime">0</div>
-                        <div class="stat-label">总时长(分钟)</div>
+                        <div class="stat-label" data-i18n="checkin.stats.time">总时长(分钟)</div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">🏃</div>
                     <div class="stat-info">
                         <div class="stat-number" id="totalDays">0</div>
-                        <div class="stat-label">累计天数</div>
+                        <div class="stat-label" data-i18n="checkin.stats.days">累计天数</div>
                     </div>
                 </div>
             </div>
@@ -76,7 +77,7 @@
                     <span>‹</span>
                 </button>
                 <div class="current-month">
-                    <h2 id="currentMonthYear">2024年1月</h2>
+                    <h2 id="currentMonthYear">2025年1月</h2>
                 </div>
                 <button class="nav-btn" id="nextMonth">
                     <span>›</span>
@@ -86,13 +87,13 @@
             <!-- 日历视图 -->
             <div class="calendar-container">
                 <div class="calendar-header">
-                    <div class="day-label">日</div>
-                    <div class="day-label">一</div>
-                    <div class="day-label">二</div>
-                    <div class="day-label">三</div>
-                    <div class="day-label">四</div>
-                    <div class="day-label">五</div>
-                    <div class="day-label">六</div>
+                    <div class="day-label" data-calendar-day="0">日</div>
+                    <div class="day-label" data-calendar-day="1">一</div>
+                    <div class="day-label" data-calendar-day="2">二</div>
+                    <div class="day-label" data-calendar-day="3">三</div>
+                    <div class="day-label" data-calendar-day="4">四</div>
+                    <div class="day-label" data-calendar-day="5">五</div>
+                    <div class="day-label" data-calendar-day="6">六</div>
                 </div>
                 <div class="calendar-grid" id="calendarGrid">
                     <!-- 日历格子将通过JavaScript动态生成 -->
@@ -102,37 +103,37 @@
             <!-- 今日打卡区域 -->
             <div class="today-checkin" id="todayCheckin">
                 <div class="checkin-card">
-                    <h3>今日打卡</h3>
+                    <h3 data-i18n="checkin.today.title">今日打卡</h3>
                     <div class="checkin-form" id="checkinForm">
                         <div class="form-group">
-                            <label for="duration">运动时长 (分钟)</label>
-                            <input type="number" id="duration" min="1" max="300" placeholder="请输入运动时长">
+                            <label for="duration" data-i18n="checkin.form.duration">运动时长 (分钟)</label>
+                            <input type="number" id="duration" min="1" max="300" data-i18n-placeholder="checkin.form.durationPlaceholder" placeholder="请输入运动时长">
                         </div>
                         <div class="form-group">
-                            <label for="feeling">运动感受</label>
+                            <label for="feeling" data-i18n="checkin.form.feeling">运动感受</label>
                             <select id="feeling">
-                                <option value="">选择感受</option>
-                                <option value="excellent">😄 非常棒</option>
-                                <option value="good">😊 感觉良好</option>
-                                <option value="normal">😐 一般般</option>
-                                <option value="tired">😓 有点累</option>
-                                <option value="hard">😰 很辛苦</option>
+                                <option value="" data-i18n="checkin.form.feeling.placeholder">选择感受</option>
+                                <option value="excellent" data-i18n="checkin.form.feeling.excellent">😄 非常棒</option>
+                                <option value="good" data-i18n="checkin.form.feeling.good">😊 感觉良好</option>
+                                <option value="normal" data-i18n="checkin.form.feeling.normal">😐 一般般</option>
+                                <option value="tired" data-i18n="checkin.form.feeling.tired">😓 有点累</option>
+                                <option value="hard" data-i18n="checkin.form.feeling.hard">😰 很辛苦</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="notes">备注 (可选)</label>
-                            <textarea id="notes" placeholder="记录今天的运动心得..."></textarea>
+                            <label for="notes" data-i18n="checkin.form.notes">备注 (可选)</label>
+                            <textarea id="notes" data-i18n-placeholder="checkin.form.notes.placeholder" placeholder="记录今天的运动心得..."></textarea>
                         </div>
                         <button class="checkin-btn" id="checkinBtn">
                             <span class="btn-icon">✓</span>
-                            完成打卡
+                            <span data-i18n="checkin.form.submit">完成打卡</span>
                         </button>
                     </div>
                     <div class="checkin-success" id="checkinSuccess" style="display: none;">
                         <div class="success-icon">🎉</div>
-                        <h4>打卡成功！</h4>
-                        <p>今天的运动已记录，继续保持！</p>
-                        <button class="edit-btn" id="editBtn">修改记录</button>
+                        <h4 data-i18n="checkin.success.title">打卡成功！</h4>
+                        <p data-i18n="checkin.success.desc">今天的运动已记录，继续保持！</p>
+                        <button class="edit-btn" id="editBtn" data-i18n="checkin.success.edit">修改记录</button>
                     </div>
                 </div>
             </div>
@@ -141,7 +142,7 @@
             <div class="modal-overlay" id="modalOverlay" style="display: none;">
                 <div class="modal">
                     <div class="modal-header">
-                        <h3 id="modalTitle">打卡详情</h3>
+                        <h3 id="modalTitle" data-i18n="checkin.modal.title">打卡详情</h3>
                         <button class="close-btn" id="closeModal">&times;</button>
                     </div>
                     <div class="modal-body" id="modalBody">
@@ -153,6 +154,74 @@
     </main>
 
     <script src="../js/main.js"></script>
+    <script src="../js/i18n.js"></script>
     <script src="../js/checkin.js"></script>
+    
+    <script>
+        // 页面加载完成后初始化国际化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 确保i18n已初始化
+            if (window.i18n) {
+                window.i18n.translatePage();
+            }
+            
+            // 监听语言变更事件，更新特殊元素
+            window.addEventListener('languageChanged', function(e) {
+                updatePlaceholders();
+                updateSelectOptions();
+            });
+            
+            // 更新placeholder属性
+            function updatePlaceholders() {
+                const durationInput = document.getElementById('duration');
+                const notesTextarea = document.getElementById('notes');
+                
+                if (durationInput) {
+                    durationInput.placeholder = window.t('checkin.form.duration.placeholder');
+                }
+                if (notesTextarea) {
+                    notesTextarea.placeholder = window.t('checkin.form.notes.placeholder');
+                }
+            }
+            
+            // 更新select选项
+            function updateSelectOptions() {
+                const feelingSelect = document.getElementById('feeling');
+                if (feelingSelect) {
+                    const options = feelingSelect.querySelectorAll('option');
+                    options.forEach(option => {
+                        const key = option.dataset.i18n;
+                        if (key) {
+                            option.textContent = window.t(key);
+                        }
+                    });
+                }
+            }
+            
+            // 更新日历标题
+            function updateCalendarDays() {
+                const dayLabels = document.querySelectorAll('[data-calendar-day]');
+                const days = window.i18n.t('calendar.days') || ['日', '一', '二', '三', '四', '五', '六'];
+                
+                dayLabels.forEach((label, index) => {
+                    if (days[index]) {
+                        label.textContent = days[index];
+                    }
+                });
+            }
+            
+            // 初始化时也要更新这些元素
+            updatePlaceholders();
+            updateSelectOptions();
+            updateCalendarDays();
+            
+            // 在语言变更时也要更新日历标题
+            window.addEventListener('languageChanged', function(e) {
+                updatePlaceholders();
+                updateSelectOptions();
+                updateCalendarDays();
+            });
+        });
+    </script>
 </body>
 </html>

@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 预加载关键资源
     const preloadLinks = [
         'tools/app.html',
-        'tools/planner.html',
+        'tools/checkin.html',
         'tools/calculator.html'
     ];
     

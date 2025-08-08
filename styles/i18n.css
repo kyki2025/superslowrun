@@ -1,0 +1,160 @@
+/* 国际化样式 */
+.language-selector {
+    position: relative;
+    margin-left: 1rem;
+}
+
+.lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
+}
+
+.lang-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.lang-icon {
+    font-size: 1rem;
+}
+
+.lang-text {
+    font-weight: 500;
+}
+
+.lang-arrow {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.lang-btn:hover .lang-arrow {
+    transform: rotate(180deg);
+}
+
+.lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+    min-width: 120px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.lang-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.lang-option {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.lang-option:hover {
+    background: var(--bg-secondary);
+}
+
+.lang-option:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.lang-option:last-child {
+    border-radius: 0 0 8px 8px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .language-selector {
+        margin-left: 0.5rem;
+    }
+    
+    .lang-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .lang-text {
+        display: none;
+    }
+    
+    .lang-dropdown {
+        right: -10px;
+        min-width: 100px;
+    }
+    
+    .lang-option {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .lang-btn {
+        padding: 0.3rem 0.6rem;
+    }
+    
+    .lang-icon {
+        font-size: 0.9rem;
+    }
+    
+    .lang-dropdown {
+        right: -20px;
+    }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+    .lang-dropdown {
+        background: var(--bg-dark, #1a1a1a);
+        border-color: var(--border-dark, #333);
+    }
+    
+    .lang-option:hover {
+        background: var(--bg-secondary-dark, #2a2a2a);
+    }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+    .lang-btn {
+        border-width: 2px;
+    }
+    
+    .lang-dropdown {
+        border-width: 2px;
+    }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+    .lang-btn,
+    .lang-arrow,
+    .lang-dropdown,
+    .lang-option {
+        transition: none;
+    }
+}
