@@ -1,0 +1,686 @@
+/* 卡路里计算器专用样式 */
+.calculator-main {
+    padding-top: 90px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.calculator-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.calculator-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.calculator-header p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+
+/* 计算器容器 */
+.calculator-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 输入面板 */
+.input-panel {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border-color);
+    height: fit-content;
+}
+
+.input-panel h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.input-panel h2::before {
+    content: '👤';
+    font-size: 1.5rem;
+}
+
+.input-panel h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 2rem 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.input-panel h3::before {
+    content: '🏃‍♂️';
+    font-size: 1.2rem;
+}
+
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.input-group input,
+.input-group select {
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.input-hint {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 0.25rem;
+}
+
+/* 计算按钮区域 */
+.calculate-section {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.calculate-btn {
+    flex: 1;
+    padding: 16px 24px;
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-md);
+}
+
+.calculate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.calculate-btn:active {
+    transform: translateY(0);
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+}
+
+.reset-btn {
+    padding: 16px 24px;
+    background: white;
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* 结果面板 */
+.result-panel {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border-color);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.result-panel.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.result-panel h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.result-panel h2::before {
+    content: '🔥';
+    font-size: 1.5rem;
+}
+
+/* 主要结果显示 */
+.result-main {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.calorie-display {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+}
+
+.calorie-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.calorie-unit {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* 结果分解 */
+.result-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+}
+
+.breakdown-label {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.breakdown-value {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* 食物对比 */
+.comparison-section {
+    margin-bottom: 2rem;
+}
+
+.comparison-section h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.comparison-section h3::before {
+    content: '🍎';
+    font-size: 1.1rem;
+}
+
+.food-comparisons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.food-item {
+    text-align: center;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.food-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.food-emoji {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.food-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.food-amount {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* 健康洞察 */
+.insights-section {
+    margin-bottom: 2rem;
+}
+
+.insights-section h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.insights-section h3::before {
+    content: '💡';
+    font-size: 1.1rem;
+}
+
+.insights-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.insight-item {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.insight-item.warning {
+    border-left-color: #f59e0b;
+    background: #fef3c7;
+}
+
+.insight-item.success {
+    border-left-color: #10b981;
+    background: #d1fae5;
+}
+
+.insight-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+/* 图表区域 */
+.chart-section {
+    margin-bottom: 2rem;
+}
+
+.chart-section h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chart-section h3::before {
+    content: '📊';
+    font-size: 1.1rem;
+}
+
+#calorieChart {
+    width: 100%;
+    height: 200px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+}
+
+/* 操作按钮 */
+.action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.save-btn {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.share-btn {
+    background: var(--gradient-accent);
+    color: white;
+}
+
+.history-btn {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* 历史记录面板 */
+.history-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.history-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.close-history {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-light);
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-history:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.history-content {
+    max-width: 600px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+}
+
+.history-item {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.history-date {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.history-calories {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.25rem;
+}
+
+.history-details {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* 信息卡片 */
+.info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.info-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.info-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.info-card h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.info-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .calculator-main {
+        padding-top: 80px;
+    }
+    
+    .calculator-header h1 {
+        font-size: 2rem;
+    }
+    
+    .calculator-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .input-panel,
+    .result-panel {
+        padding: 2rem;
+    }
+    
+    .input-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .calculate-section {
+        flex-direction: column;
+    }
+    
+    .calorie-number {
+        font-size: 2.5rem;
+    }
+    
+    .food-comparisons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-btn {
+        min-width: auto;
+    }
+    
+    .history-panel {
+        padding: 1rem;
+    }
+    
+    .history-content {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .input-panel,
+    .result-panel {
+        padding: 1.5rem;
+    }
+    
+    .calorie-display {
+        padding: 1.5rem;
+    }
+    
+    .calorie-number {
+        font-size: 2rem;
+    }
+    
+    .food-comparisons {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 加载动画 */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 表单验证样式 */
+.input-group.error input,
+.input-group.error select {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.input-group.error .input-hint {
+    color: #ef4444;
+}
+
+.input-group.success input,
+.input-group.success select {
+    border-color: #10b981;
+}
+
+/* 动画效果 */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-up {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

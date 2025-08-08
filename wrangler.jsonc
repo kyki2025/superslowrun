@@ -2,15 +2,6 @@
   "name": "superslowrun",
   "compatibility_date": "2025-08-08",
   "assets": {
-    "directory": ".",
-    "exclude": [
-      "node_modules/**",
-      ".git/**",
-      "*.md",
-      ".gitignore",
-      "package-lock.json",
-      "bun.lockb",
-      ".wrangler/**"
-    ]
+    "directory": "./dist"
   }
 }
