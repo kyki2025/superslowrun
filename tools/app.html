@@ -274,7 +274,8 @@
                     currentDuration: this.config.defaultDuration,
                     elapsedTime: 0,
                     currentSound: 'click',
-                    volume: this.config.volumeDefault
+                    volume: this.config.volumeDefault,
+                    metronomeAutoStarted: false
                 };
 
                 this.stats = {
@@ -284,7 +285,8 @@
                     totalCalories: 2700,
                     averageBPM: 180,
                     weeklyTarget: 27 * 60,
-                    todayTime: 16 * 60
+                    todayTime: 16 * 60,
+                    recentActivities: []
                 };
 
                 this.timers = {
@@ -412,6 +414,30 @@
                     const element = document.getElementById(id);
                     if (element) element.textContent = value.toString();
                 });
+                this.renderRecentActivities();
+            }
+
+            renderRecentActivities() {
+                const list = document.getElementById('activity-list');
+                if (!list) return;
+                const records = (this.stats.recentActivities || []).slice(0, 5);
+                if (!records.length) return; // 若无记录，保留原始示例
+                list.innerHTML = records.map(r => {
+                    const d = new Date(r.ts || Date.now());
+                    const month = d.getMonth() + 1;
+                    const day = d.getDate();
+                    const hh = String(d.getHours()).padStart(2, '0');
+                    const mm = String(d.getMinutes()).padStart(2, '0');
+                    const duration = this.formatSeconds ? this.formatSeconds(r.durationSec || 0) : `${Math.floor((r.durationSec||0)/60)}:${String((r.durationSec||0)%60).padStart(2,'0')}`;
+                    const bpm = r.bpm || this.state.bpm;
+                    return `
+                        <div class="activity-item">
+                            <div class="activity-time">${month}月${day}日 ${hh}:${mm}</div>
+                            <div class="activity-duration">${duration}</div>
+                            <div class="activity-type">${bpm} BPM · ${r.steps||0}步 · 卡路里 ${r.calories||0}</div>
+                        </div>
+                    `;
+                }).join('');
             }
 
             formatTime(minutes) {
@@ -673,7 +699,13 @@
                 this.core.state.elapsedTime = 0;
                 const overlay = document.getElementById('exercise-overlay');
                 if (overlay) overlay.style.display = 'flex';
-                // 确保节拍器在运动时可用：保持用户决定
+                // 自动启动节拍器（若当前未运行），用于运动中发声
+                if (!this.core.state.isMetronomeRunning) {
+                    this.core.state.metronomeAutoStarted = true;
+                    this.core.startMetronome();
+                } else {
+                    this.core.state.metronomeAutoStarted = false;
+                }
                 this.updateExerciseUI();
                 this.core.timers.exercise = setInterval(() => {
                     if (!this.core.state.isExerciseRunning || this.core.state.exercisePaused) return;
@@ -692,6 +724,11 @@
                 this.core.state.exercisePaused = !this.core.state.exercisePaused;
                 const pauseBtn = document.getElementById('pause-exercise');
                 if (pauseBtn) pauseBtn.textContent = this.core.state.exercisePaused ? '继续' : '暂停';
+                // 暂停时如果是自动启动的节拍器则停止，继续时再恢复
+                if (this.core.state.metronomeAutoStarted) {
+                    if (this.core.state.exercisePaused) this.core.stopMetronome();
+                    else this.core.startMetronome();
+                }
             }
 
             stopExercise(saveStats) {
@@ -701,14 +738,33 @@
                 }
                 const overlay = document.getElementById('exercise-overlay');
                 if (overlay) overlay.style.display = 'none';
+
+                // 若运动期间我们自动启动了节拍器，则在结束时停止
+                if (this.core.state.metronomeAutoStarted) {
+                    this.core.stopMetronome();
+                    this.core.state.metronomeAutoStarted = false;
+                }
+
                 if (saveStats) {
-                    const mins = this.core.state.currentDuration;
-                    const steps = Math.round((this.core.state.bpm / 60) * (mins * 60));
+                    const actualSeconds = this.core.state.elapsedTime; // 实际运动时长
+                    const actualMins = Math.max(1, Math.round(actualSeconds / 60));
+                    const steps = Math.round((this.core.state.bpm / 60) * actualSeconds);
+                    const calories = Math.round(actualMins * 3);
                     this.core.stats.totalSessions += 1;
-                    this.core.stats.totalTime += mins;
+                    this.core.stats.totalTime += actualMins;
+                    this.core.stats.todayTime = (this.core.stats.todayTime || 0) + actualMins * 60;
                     this.core.stats.totalSteps += steps;
-                    // 简易卡路里估算（可按需替换）
-                    this.core.stats.totalCalories += Math.round(mins * 3);
+                    this.core.stats.totalCalories += calories;
+                    // 最近记录（保留5条）
+                    this.core.stats.recentActivities = this.core.stats.recentActivities || [];
+                    this.core.stats.recentActivities.unshift({
+                        ts: Date.now(),
+                        durationSec: actualSeconds,
+                        bpm: this.core.state.bpm,
+                        steps,
+                        calories
+                    });
+                    this.core.stats.recentActivities = this.core.stats.recentActivities.slice(0, 5);
                     this.core.updateStatsDisplay();
                     this.core.saveData();
                 }
