@@ -249,13 +249,371 @@
     </div>
 
     <script>
-        // 避免重复声明的临时修复
-        window.SuperSlowRunCore = window.SuperSlowRunCore || class {};
-        window.SuperSlowRunMethods = window.SuperSlowRunMethods || class {};
-        window.SuperSlowRunApp = window.SuperSlowRunApp || class {};
+        // 超慢跑助手 - 内联版本避免模块冲突
+        class SuperSlowRunCore {
+            constructor() {
+                this.config = {
+                    defaultBPM: 180,
+                    minBPM: 170,
+                    maxBPM: 190,
+                    defaultDuration: 15,
+                    maxDuration: 999,
+                    volumeDefault: 0.65
+                };
+
+                this.state = {
+                    bpm: this.config.defaultBPM,
+                    isMetronomeRunning: false,
+                    isExerciseRunning: false,
+                    exercisePaused: false,
+                    currentDuration: this.config.defaultDuration,
+                    elapsedTime: 0,
+                    currentSound: 'click',
+                    volume: this.config.volumeDefault
+                };
+
+                this.stats = {
+                    totalSessions: 6,
+                    totalTime: 35,
+                    totalSteps: 6738,
+                    totalCalories: 2700,
+                    averageBPM: 180,
+                    weeklyTarget: 27 * 60,
+                    todayTime: 16 * 60
+                };
+
+                this.timers = {
+                    metronome: null,
+                    exercise: null,
+                    stats: null
+                };
+
+                this.audioContext = null;
+                this.audioBuffer = null;
+                this.initAudio();
+                this.loadData();
+            }
+
+            async initAudio() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.soundConfigs = {
+                        beep: { frequency: 800, duration: 0.1, wave: 'sine' },
+                        tick: { frequency: 1000, duration: 0.05, wave: 'square' },
+                        click: { frequency: 1200, duration: 0.08, wave: 'triangle' },
+                        bell: { frequency: 600, duration: 0.2, wave: 'sine' },
+                        drum: { frequency: 100, duration: 0.15, wave: 'sawtooth' }
+                    };
+                } catch (error) {
+                    console.warn('音频初始化失败:', error);
+                }
+            }
+
+            playMetronomeSound() {
+                if (!this.audioContext || this.state.volume === 0) return;
+                try {
+                    const config = this.soundConfigs[this.state.currentSound] || this.soundConfigs.click;
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    oscillator.frequency.setValueAtTime(config.frequency, this.audioContext.currentTime);
+                    oscillator.type = config.wave;
+                    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(this.state.volume, this.audioContext.currentTime + 0.01);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + config.duration);
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + config.duration);
+                } catch (error) {
+                    console.warn('音效播放失败:', error);
+                }
+            }
+
+            startMetronome() {
+                if (this.state.isMetronomeRunning) return;
+                if (this.audioContext && this.audioContext.state === 'suspended') {
+                    this.audioContext.resume();
+                }
+                this.state.isMetronomeRunning = true;
+                const interval = 60000 / this.state.bpm;
+                this.timers.metronome = setInterval(() => {
+                    if (this.state.isMetronomeRunning) {
+                        this.playMetronomeSound();
+                        this.triggerMetronomeVisual();
+                    }
+                }, interval);
+                console.log(`节拍器已启动 - BPM: ${this.state.bpm}`);
+            }
+
+            stopMetronome() {
+                this.state.isMetronomeRunning = false;
+                if (this.timers.metronome) {
+                    clearInterval(this.timers.metronome);
+                    this.timers.metronome = null;
+                }
+                console.log('节拍器已停止');
+            }
+
+            triggerMetronomeVisual() {
+                const circle = document.getElementById('metronome-circle');
+                if (circle) {
+                    circle.classList.add('active');
+                    setTimeout(() => circle.classList.remove('active'), 100);
+                }
+            }
+
+            setBPM(newBPM) {
+                newBPM = Math.max(this.config.minBPM, Math.min(this.config.maxBPM, parseInt(newBPM)));
+                this.state.bpm = newBPM;
+                if (this.state.isMetronomeRunning) {
+                    this.stopMetronome();
+                    this.startMetronome();
+                }
+                this.updateBPMDisplay();
+                this.saveData();
+                console.log(`BPM已设置为: ${newBPM}`);
+            }
+
+            updateBPMDisplay() {
+                const elements = ['bpm-value', 'metronome-bpm', 'current-cadence'];
+                elements.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) element.textContent = this.state.bpm;
+                });
+                const statusElement = document.getElementById('bpm-status');
+                if (statusElement) {
+                    if (this.state.bpm <= 175) statusElement.textContent = '轻度强度';
+                    else if (this.state.bpm <= 185) statusElement.textContent = '中等强度';
+                    else statusElement.textContent = '高等强度';
+                }
+            }
+
+            updateStatsDisplay() {
+                const todayElement = document.getElementById('today-time');
+                if (todayElement) {
+                    const minutes = Math.floor(this.stats.todayTime / 60);
+                    const seconds = this.stats.todayTime % 60;
+                    todayElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }
+                const caloriesElement = document.getElementById('total-calories');
+                if (caloriesElement) caloriesElement.textContent = Math.floor(this.stats.totalCalories).toString();
+                const statsElements = {
+                    'sessions-count': this.stats.totalSessions,
+                    'total-duration': this.formatTime(this.stats.totalTime),
+                    'step-count': this.stats.totalSteps,
+                    'avg-cadence': this.stats.averageBPM
+                };
+                Object.entries(statsElements).forEach(([id, value]) => {
+                    const element = document.getElementById(id);
+                    if (element) element.textContent = value.toString();
+                });
+            }
+
+            formatTime(minutes) {
+                if (minutes < 60) return `${minutes}:00`;
+                const hours = Math.floor(minutes / 60);
+                const mins = minutes % 60;
+                return `${hours}:${mins.toString().padStart(2, '0')}`;
+            }
+
+            saveData() {
+                try {
+                    const data = { state: this.state, stats: this.stats, timestamp: Date.now() };
+                    localStorage.setItem('superslowrun_data', JSON.stringify(data));
+                } catch (error) {
+                    console.warn('保存数据失败:', error);
+                }
+            }
+
+            loadData() {
+                try {
+                    const saved = localStorage.getItem('superslowrun_data');
+                    if (saved) {
+                        const data = JSON.parse(saved);
+                        if (data.state) {
+                            Object.assign(this.state, data.state);
+                            this.state.isMetronomeRunning = false;
+                            this.state.isExerciseRunning = false;
+                        }
+                        if (data.stats) Object.assign(this.stats, data.stats);
+                    }
+                } catch (error) {
+                    console.warn('加载数据失败:', error);
+                }
+            }
+        }
+
+        class SuperSlowRunApp {
+            constructor() {
+                this.core = new SuperSlowRunCore();
+                this.init();
+            }
+
+            init() {
+                console.log('🏃‍♂️ 超慢跑助手应用初始化中...');
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', () => this.onDOMReady());
+                } else {
+                    this.onDOMReady();
+                }
+            }
+
+            onDOMReady() {
+                this.bindEvents();
+                this.updateAllDisplays();
+                this.startPageAnimations();
+                console.log('✅ 超慢跑助手应用初始化完成');
+            }
+
+            bindEvents() {
+                // BPM控制事件
+                const decreaseBtn = document.getElementById('bpm-decrease');
+                const increaseBtn = document.getElementById('bpm-increase');
+                if (decreaseBtn) {
+                    decreaseBtn.addEventListener('click', () => {
+                        const newBPM = this.core.state.bpm - 5;
+                        this.core.setBPM(newBPM);
+                        this.updatePresetButtons();
+                    });
+                }
+                if (increaseBtn) {
+                    increaseBtn.addEventListener('click', () => {
+                        const newBPM = this.core.state.bpm + 5;
+                        this.core.setBPM(newBPM);
+                        this.updatePresetButtons();
+                    });
+                }
+
+                // BPM预设按钮
+                document.querySelectorAll('.preset-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const bpm = parseInt(btn.dataset.bpm);
+                        if (bpm) {
+                            this.core.setBPM(bpm);
+                            this.updatePresetButtons();
+                        }
+                    });
+                });
+
+                // 节拍器播放按钮
+                const toggleBtn = document.getElementById('metronome-toggle');
+                if (toggleBtn) {
+                    toggleBtn.addEventListener('click', () => {
+                        this.toggleMetronome();
+                    });
+                }
+
+                // 音量滑块
+                const volumeSlider = document.getElementById('volume-slider');
+                if (volumeSlider) {
+                    volumeSlider.addEventListener('input', (e) => {
+                        const volume = parseFloat(e.target.value) / 100;
+                        this.core.state.volume = volume;
+                    });
+                    volumeSlider.value = this.core.state.volume * 100;
+                }
+
+                // 音效选择按钮
+                document.querySelectorAll('.sound-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const soundType = btn.dataset.sound;
+                        if (soundType && this.core.soundConfigs[soundType]) {
+                            this.core.state.currentSound = soundType;
+                            this.updateSoundButtons();
+                            this.core.playMetronomeSound();
+                        }
+                    });
+                });
+
+                // 空格键控制节拍器
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space' && !e.target.matches('input')) {
+                        e.preventDefault();
+                        this.toggleMetronome();
+                    }
+                });
+            }
+
+            toggleMetronome() {
+                if (this.core.state.isMetronomeRunning) {
+                    this.core.stopMetronome();
+                } else {
+                    this.core.startMetronome();
+                }
+                this.updateMetronomeUI();
+            }
+
+            updateAllDisplays() {
+                this.core.updateBPMDisplay();
+                this.core.updateStatsDisplay();
+                this.updateMetronomeUI();
+                this.updatePresetButtons();
+                this.updateSoundButtons();
+            }
+
+            updateMetronomeUI() {
+                const toggleBtn = document.getElementById('metronome-toggle');
+                const statusElement = document.getElementById('metronome-status');
+                const playButton = document.querySelector('.play-button');
+                
+                if (this.core.state.isMetronomeRunning) {
+                    if (toggleBtn) toggleBtn.textContent = '⏸';
+                    if (playButton) {
+                        playButton.classList.add('playing');
+                        playButton.innerHTML = '<span class="play-icon">⏸</span>';
+                    }
+                    if (statusElement) statusElement.textContent = '正在播放';
+                } else {
+                    if (toggleBtn) toggleBtn.textContent = '▶';
+                    if (playButton) {
+                        playButton.classList.remove('playing');
+                        playButton.innerHTML = '<span class="play-icon">▶</span>';
+                    }
+                    if (statusElement) statusElement.textContent = '点击播放';
+                }
+            }
+
+            updatePresetButtons() {
+                document.querySelectorAll('.preset-btn').forEach(btn => {
+                    const bpm = parseInt(btn.dataset.bpm);
+                    if (bpm === this.core.state.bpm) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+
+            updateSoundButtons() {
+                document.querySelectorAll('.sound-btn').forEach(btn => {
+                    const sound = btn.dataset.sound;
+                    if (sound === this.core.state.currentSound) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+
+            startPageAnimations() {
+                const cards = document.querySelectorAll('.module-card');
+                cards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 150);
+                });
+            }
+        }
+
+        // 启动应用
+        document.addEventListener('DOMContentLoaded', () => {
+            new SuperSlowRunApp();
+            console.log('🎯 超慢跑助手应用启动完成');
+        });
     </script>
-    <script src="../js/app-core.js"></script>
-    <script src="../js/app-methods.js"></script>
-    <script src="../js/app.js"></script>
 </body>
 </html>
