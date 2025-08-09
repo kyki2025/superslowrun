@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>超慢跑 · 专业应用</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/app-pro.css" />
+</head>
+<body>
+  <div id="app" class="pro-app">
+    <!-- 顶部推荐卡（参考你的视觉稿） -->
+    <section class="hero-card">
+      <div class="ribbon">推荐</div>
+      <div class="hero-body">
+        <div class="app-icon">
+          <div class="grid"></div>
+        </div>
+        <h1 class="hero-title">超慢跑专业应用</h1>
+        <p class="hero-sub">完整的超慢跑训练体验，包含节拍器、实时指导、数据记录和社区功能</p>
+        <button id="cta-start" class="cta">立即体验</button>
+      </div>
+    </section>
+
+    <!-- 功能模块 -->
+    <section class="cards">
+      <article class="card" id="cadence-card">
+        <header>
+          <span>⚡</span>
+          <h2>步频控制</h2>
+        </header>
+        <div class="cadence">
+          <button class="circle-btn" data-step="-5">−</button>
+          <div class="cadence-center">
+            <input id="bpm" class="bpm" type="text" value="180" readonly>
+            <div class="unit">步/分钟</div>
+            <div class="range">建议 170–190</div>
+          </div>
+          <button class="circle-btn primary" data-step="5">+</button>
+        </div>
+        <div class="chips" id="bpm-presets">
+          <button class="chip" data-bpm="170">170</button>
+          <button class="chip" data-bpm="180">180</button>
+          <button class="chip active" data-bpm="190">190</button>
+          <button class="chip" data-bpm="200">200</button>
+        </div>
+      </article>
+
+      <article class="card" id="metronome-card">
+        <header>
+          <span>🎵</span>
+          <h2>节拍器</h2>
+        </header>
+        <div class="metronome">
+          <div class="pulse" id="pulse">
+            <div class="dot"></div>
+          </div>
+          <div class="readout">
+            <div class="value" id="bpm-read">180</div>
+            <div class="label">BPM</div>
+            <div class="badges">
+              <span class="badge gray" id="m-state">已停止</span>
+              <span class="badge purple" id="m-sound">滴答</span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <button id="btn-toggle" class="action play">▶</button>
+          <div class="volume">
+            <span class="icon">🔊</span>
+            <input id="vol" type="range" min="0" max="100" value="65" />
+            <span id="volp" class="percent">65%</span>
+          </div>
+        </div>
+        <div class="sound-select" id="sound-select">
+          <button class="sound active" data-sound="click">滴答</button>
+          <button class="sound" data-sound="beep">哔声</button>
+          <button class="sound" data-sound="tick">咔嗒</button>
+          <button class="sound" data-sound="bell">铃声</button>
+          <button class="sound" data-sound="drum">木鱼</button>
+        </div>
+      </article>
+
+      <article class="card" id="timer-card">
+        <header>
+          <span>⏱️</span>
+          <h2>智能计时</h2>
+        </header>
+        <div class="grid-3" id="time-presets">
+          <button class="time" data-min="15">15 分</button>
+          <button class="time" data-min="30">30 分</button>
+          <button class="time" data-min="45">45 分</button>
+          <button class="time" data-min="60">60 分</button>
+          <button class="time" data-min="90">90 分</button>
+          <button class="time" data-min="120">120 分</button>
+        </div>
+        <div class="custom">
+          <label>自定义（分钟）</label>
+          <input id="mins" type="number" min="1" max="999" value="15" />
+          <span class="current">当前设定：<strong id="mins-label">15 分钟</strong></span>
+        </div>
+        <button id="btn-start" class="primary wide">开始跑步</button>
+        <div class="tip">开始会进行 3 秒倒计时，随后同步启动计时与节拍器</div>
+      </article>
+
+      <article class="card" id="interval-card">
+        <header>
+          <span>🧩</span>
+          <h2>间歇训练（Beta）</h2>
+        </header>
+        <div class="interval">
+          <div class="row">
+            <label>高强（BPM/秒）</label>
+            <input id="hi-bpm" type="number" value="190" />
+            <input id="hi-sec" type="number" value="60" />
+          </div>
+          <div class="row">
+            <label>恢复（BPM/秒）</label>
+            <input id="lo-bpm" type="number" value="170" />
+            <input id="lo-sec" type="number" value="60" />
+          </div>
+          <div class="row">
+            <label>循环次数</label>
+            <input id="rounds" type="number" value="4" />
+          </div>
+          <button id="btn-interval" class="secondary wide">开始间歇</button>
+          <div class="tip small">训练中自动切换 BPM 并提示音效</div>
+        </div>
+      </article>
+
+      <article class="card" id="stats-card">
+        <header>
+          <span>📊</span>
+          <h2>今日与总览</h2>
+        </header>
+        <div class="mini-4">
+          <div class="mini"><div id="s-count" class="num">0</div><div class="txt">总次数</div></div>
+          <div class="mini"><div id="s-time" class="num">0:00</div><div class="txt">累计时长</div></div>
+          <div class="mini"><div id="s-steps" class="num">0</div><div class="txt">总步数</div></div>
+          <div class="mini"><div id="s-bpm" class="num">180</div><div class="txt">平均 BPM</div></div>
+        </div>
+        <div class="list" id="recent"></div>
+      </article>
+    </section>
+  </div>
+
+  <!-- 进行中的全屏浮层 -->
+  <div id="overlay" class="overlay" style="display:none">
+    <div class="panel">
+      <div class="panel-hd">
+        <h3>运动进行中</h3>
+        <button id="btn-close" class="icon-btn">×</button>
+      </div>
+      <div class="panel-timer">
+        <div class="ring"><div id="left" class="t">15:00</div><div class="sub">剩余时间</div></div>
+      </div>
+      <div class="panel-grid">
+        <div class="cell"><span>当前步频</span><strong id="nowbpm">180</strong></div>
+        <div class="cell"><span>已用时间</span><strong id="elapsed">0:00</strong></div>
+        <div class="cell"><span>预计步数</span><strong id="est">0</strong></div>
+        <div class="cell"><span>消耗热量</span><strong id="cal">0</strong></div>
+      </div>
+      <div class="panel-actions">
+        <button id="btn-pause" class="ghost">暂停</button>
+        <button id="btn-stop" class="danger">结束</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/app-pro.js"></script>
+</body>
+</html>
+
