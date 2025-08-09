@@ -17,35 +17,33 @@
             <p class="app-subtitle">科学节拍，智能运动</p>
         </div>
 
-        <!-- 步频控制卡片 -->
-        <div class="module-card">
-            <div class="card-header">
-                <span class="card-icon">⚡</span>
-                <span class="card-title">步频控制</span>
+        <!-- 步频控制模块 -->
+        <div class="bpm-module">
+            <div class="bpm-display-large">
+                <button class="bpm-btn-large decrease" id="bpm-decrease">−</button>
+                <div class="bpm-center">
+                    <input type="text" class="bpm-value-large" id="bpm-input" value="190" readonly>
+                    <div class="bpm-label">步/分钟</div>
+                    <div class="bpm-range">范围: 100-300</div>
+                </div>
+                <button class="bpm-btn-large increase" id="bpm-increase">+</button>
             </div>
-            <div class="bpm-section">
-                <div class="bpm-controls">
-                    <button class="bpm-btn decrease" id="bpm-decrease">−</button>
-                    <div class="bpm-display">
-                        <input type="number" class="bpm-input" id="bpm-input" value="190" min="100" max="300">
-                        <div class="bpm-unit">步/分钟</div>
-                        <div class="bpm-range">范围: 100-300</div>
-                    </div>
-                    <button class="bpm-btn increase" id="bpm-increase">+</button>
+            
+            <div class="presets-section">
+                <h3 class="section-title">快速设置</h3>
+                <div class="preset-grid">
+                    <button class="preset-item" data-bpm="170">170</button>
+                    <button class="preset-item" data-bpm="180">180</button>
+                    <button class="preset-item active" data-bpm="190">190</button>
                 </div>
-                <div class="quick-presets">
-                    <span class="presets-label">快速设置</span>
-                    <div class="preset-buttons">
-                        <button class="preset-btn" data-bpm="170">170</button>
-                        <button class="preset-btn" data-bpm="180">180</button>
-                        <button class="preset-btn active" data-bpm="190">190</button>
-                    </div>
+            </div>
+            
+            <div class="recommendation-tip">
+                <div class="tip-header">
+                    <span class="check-icon">✓</span>
+                    <span class="tip-title">推荐范围</span>
                 </div>
-                <div class="bpm-tip">
-                    <span class="tip-icon">✓</span>
-                    <span class="tip-text">推荐范围</span>
-                    <div class="tip-description">超慢跑最佳节奏 (170-190 步/分钟)</div>
-                </div>
+                <p class="tip-desc">超慢跑最佳节奏 (170-190 步/分钟)</p>
             </div>
         </div>
 
@@ -522,6 +520,8 @@
                     decreaseBtn.addEventListener('click', () => {
                         const newBPM = this.core.state.bpm - 5;
                         this.core.setBPM(newBPM);
+                        this.updateBPMInput();
+                        this.updatePresetItems();
                         this.updatePresetButtons();
                     });
                 }
@@ -529,11 +529,13 @@
                     increaseBtn.addEventListener('click', () => {
                         const newBPM = this.core.state.bpm + 5;
                         this.core.setBPM(newBPM);
+                        this.updateBPMInput();
+                        this.updatePresetItems();
                         this.updatePresetButtons();
                     });
                 }
 
-                // BPM预设按钮
+                // BPM预设按钮 (旧的)
                 document.querySelectorAll('.preset-btn').forEach(btn => {
                     btn.addEventListener('click', () => {
                         const bpm = parseInt(btn.dataset.bpm);
@@ -542,6 +544,18 @@
                             const input = document.getElementById('custom-bpm');
                             if (input) input.value = String(this.core.state.bpm);
                             this.updatePresetButtons();
+                        }
+                    });
+                });
+                
+                // 新的BPM预设按钮
+                document.querySelectorAll('.preset-item').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const bpm = parseInt(btn.dataset.bpm);
+                        if (Number.isFinite(bpm)) {
+                            this.core.setBPM(bpm);
+                            this.updateBPMInput();
+                            this.updatePresetItems();
                         }
                     });
                 });
@@ -567,6 +581,7 @@
                         if (Number.isFinite(v)) {
                             this.core.state.bpm = Math.max(this.core.config.minBPM, Math.min(this.core.config.maxBPM, v));
                             this.updateBPMDisplays();
+                            this.updatePresetItems();
                             this.updatePresetButtons();
                         }
                     });
@@ -715,6 +730,24 @@
                 
                 // 更新其他BPM显示元素
                 this.core.updateBPMDisplay();
+            }
+
+            updateBPMInput() {
+                const bpmInput = document.getElementById('bpm-input');
+                if (bpmInput && bpmInput !== document.activeElement) {
+                    bpmInput.value = String(this.core.state.bpm);
+                }
+            }
+            
+            updatePresetItems() {
+                document.querySelectorAll('.preset-item').forEach(btn => {
+                    const bpm = parseInt(btn.dataset.bpm);
+                    if (bpm === this.core.state.bpm) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
             }
 
             updatePresetButtons() {

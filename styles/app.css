@@ -1,4 +1,4 @@
-/* 超慢跑助手 - 1:1复刻界面样式 */
+/* 超慢跑助手 - 现代简洁设计风格 */
 
 * {
     margin: 0;
@@ -8,11 +8,11 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-    background: linear-gradient(180deg, #120b2b 0%, #1a0f39 50%, #1f1346 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
-    color: #ffffff;
+    color: #2d3748;
     overflow-x: hidden;
-    line-height: 1.4;
+    line-height: 1.6;
 }
 
 /* 背景网格纹理 */
@@ -108,7 +108,175 @@ body::before {
     color: #ffffff;
 }
 
-/* ========== 步频控制样式 ========== */
+/* ========== 新的BPM模块样式 ========== */
+
+.bpm-module {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.bpm-display-large {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+    gap: 24px;
+}
+
+.bpm-btn-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: none;
+    font-size: 32px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.bpm-btn-large.decrease {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.bpm-btn-large.increase {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.bpm-btn-large:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.bpm-btn-large:active {
+    transform: scale(0.95);
+}
+
+.bpm-center {
+    text-align: center;
+    flex: 1;
+    max-width: 200px;
+}
+
+.bpm-value-large {
+    background: transparent;
+    border: none;
+    font-size: 80px;
+    font-weight: 700;
+    color: #2d3748;
+    text-align: center;
+    width: 100%;
+    outline: none;
+    line-height: 1;
+    margin-bottom: 8px;
+    cursor: default;
+    user-select: all;
+}
+
+.bpm-label {
+    font-size: 16px;
+    color: #718096;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.bpm-range {
+    font-size: 14px;
+    color: #a0aec0;
+    font-weight: 400;
+}
+
+.presets-section {
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.preset-grid {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.preset-item {
+    padding: 16px 24px;
+    border-radius: 16px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: #4a5568;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 80px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.preset-item:hover {
+    border-color: #cbd5e0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.preset-item.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+    color: white;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.recommendation-tip {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(72, 187, 120, 0.2);
+}
+
+.tip-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.check-icon {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.tip-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.tip-desc {
+    font-size: 14px;
+    opacity: 0.9;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ========== 旧的步频控制样式 (保留兼容) ========== */
 .bpm-section {
     text-align: center;
 }
