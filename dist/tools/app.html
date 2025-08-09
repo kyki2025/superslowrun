@@ -3,15 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>超慢跑助手 - 专业版</title>
+    <title>超慢跑助手</title>
     <link rel="stylesheet" href="../styles/app.css">
 </head>
 <body>
-    <div id="app"></div>
+    <div class="app-container">
+        <!-- 头部区域 -->
+        <div class="app-header">
+            <div class="app-logo">
+                <div class="logo-icon">♪</div>
+            </div>
+            <h1 class="app-title">超慢跑助手</h1>
+            <p class="app-subtitle">科学节拍，智能运动</p>
+        </div>
+
+        <!-- 步频控制卡片 -->
+        <div class="module-card">
+            <div class="card-header">
+                <span class="card-icon">⚡</span>
+                <span class="card-title">步频控制</span>
+            </div>
+            <div class="bpm-section">
+                <div class="bpm-controls">
+                    <button class="bpm-btn decrease" id="bpm-decrease">-</button>
+                    <div class="bpm-display">
+                        <div class="bpm-number" id="bpm-value">180</div>
+                        <div class="bpm-unit">步/分</div>
+                        <div class="bpm-range">范围: 170-190</div>
+                        <div class="bpm-status" id="bpm-status">中等强度</div>
+                    </div>
+                    <button class="bpm-btn increase" id="bpm-increase">+</button>
+                </div>
+                <div class="preset-buttons">
+                    <button class="preset-btn" data-bpm="170">170</button>
+                    <button class="preset-btn active" data-bpm="180">180</button>
+                    <button class="preset-btn" data-bpm="190">190</button>
+                </div>
+                <div class="bpm-tip">
+                    <span class="tip-icon">✓</span>
+                    <span class="tip-text">建议步频范围170-190步/分钟</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 节拍器卡片 -->
+        <div class="module-card">
+            <div class="card-header">
+                <span class="card-icon">🎵</span>
+                <span class="card-title">节拍器</span>
+            </div>
+            <div class="metronome-section">
+                <div class="metronome-display">
+                    <div class="metronome-circle" id="metronome-circle">
+                        <div class="metronome-dot"></div>
+                    </div>
+                    <div class="metronome-info">
+                        <div class="metronome-bpm" id="metronome-bpm">180</div>
+                        <div class="metronome-unit">BPM</div>
+                        <div class="metronome-status" id="metronome-status">点击播放</div>
+                    </div>
+                </div>
+                <button class="play-button" id="metronome-toggle">
+                    <span class="play-icon">▶</span>
+                </button>
+                <div class="volume-section">
+                    <div class="volume-control">
+                        <span class="volume-icon">🔊</span>
+                        <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="65">
+                        <span class="volume-text">音量调节</span>
+                    </div>
+                </div>
+                <div class="sound-selector">
+                    <span class="selector-label">节拍音效</span>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" data-sound="beep">哔哔</button>
+                        <button class="sound-btn" data-sound="tick">滴答</button>
+                        <button class="sound-btn active" data-sound="click">点击</button>
+                        <button class="sound-btn" data-sound="bell">铃声</button>
+                        <button class="sound-btn" data-sound="drum">鼓点</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 跑步计时器卡片 -->
+        <div class="module-card">
+            <div class="card-header">
+                <span class="card-icon">⏰</span>
+                <span class="card-title">跑步计时器</span>
+            </div>
+            <div class="timer-section">
+                <div class="timer-presets">
+                    <span class="presets-label">快速选择时间</span>
+                    <div class="preset-time-buttons">
+                        <button class="time-btn" data-time="15">15分</button>
+                        <button class="time-btn" data-time="30">30分</button>
+                        <button class="time-btn" data-time="45">45分</button>
+                        <button class="time-btn" data-time="60">60分</button>
+                        <button class="time-btn" data-time="90">90分</button>
+                        <button class="time-btn" data-time="120">120分</button>
+                    </div>
+                </div>
+                <div class="custom-time">
+                    <label class="custom-label">自定义时间（分钟）</label>
+                    <input type="number" id="custom-minutes" placeholder="15" min="1" max="999" value="15">
+                </div>
+                <button class="start-button" id="start-exercise">
+                    <span class="start-icon">▶</span>
+                    <span class="start-text">开始跑步</span>
+                </button>
+                <div class="exercise-tips">
+                    <div class="tip-item">
+                        <span class="tip-emoji">🏃‍♂️</span>
+                        <span>超慢跑是一种轻松的低强度有氧运动</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-emoji">💚</span>
+                        <span>建议心率保持在最大心率的60-70%</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-emoji">⏰</span>
+                        <span>建议每次运动15-60分钟，效果最佳</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-emoji">🌟</span>
+                        <span>坚持每周3-5次运动，养成健康习惯</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 运动统计卡片 -->
+        <div class="module-card">
+            <div class="card-header">
+                <span class="card-icon">📊</span>
+                <span class="card-title">运动统计</span>
+            </div>
+            <div class="stats-section">
+                <div class="main-stats">
+                    <div class="main-stat-item">
+                        <div class="stat-value" id="today-time">16:00</div>
+                        <div class="stat-label">今日运动时间</div>
+                        <div class="stat-target">目标 27:00 本周</div>
+                    </div>
+                    <div class="main-stat-item">
+                        <div class="stat-value calories" id="total-calories">2700</div>
+                        <div class="stat-label">消耗卡路里</div>
+                    </div>
+                </div>
+                <div class="mini-stats">
+                    <div class="mini-stat">
+                        <div class="mini-value" id="sessions-count">6</div>
+                        <div class="mini-label">运动次数</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-value" id="total-duration">34:58</div>
+                        <div class="mini-label">运动总时长</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-value" id="step-count">6738</div>
+                        <div class="mini-label">总步数</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-value" id="avg-cadence">180</div>
+                        <div class="mini-label">平均步频</div>
+                    </div>
+                </div>
+                <div class="recent-activities">
+                    <h4 class="activities-title">最近记录</h4>
+                    <div class="activity-list" id="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-time">今天 08:34</div>
+                            <div class="activity-duration">16:00</div>
+                            <div class="activity-type">慢跑 · 中等强度</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-time">8月7日 20:30</div>
+                            <div class="activity-duration">16:27</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-time">8月7日 17:29</div>
+                            <div class="activity-duration">6:14</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-time">8月7日 17:06</div>
+                            <div class="activity-duration">5:52</div>
+                            <div class="activity-type">慢跑 · 轻度有氧</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-time">8月7日 12:31</div>
+                            <div class="activity-duration">6:14</div>
+                            <div class="activity-type">慢跑 · 中等强度</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部信息 -->
+        <div class="app-footer">
+            <p>超慢跑 - 让健康运动成为生活习惯</p>
+        </div>
+    </div>
+
+    <!-- 运动进行中的全屏覆盖层 -->
+    <div class="exercise-overlay" id="exercise-overlay" style="display: none;">
+        <div class="exercise-container">
+            <div class="exercise-header">
+                <h2>运动进行中</h2>
+                <button class="close-btn" id="close-exercise">×</button>
+            </div>
+            <div class="exercise-timer">
+                <div class="timer-circle">
+                    <div class="timer-display" id="exercise-timer-display">15:00</div>
+                    <div class="timer-label">剩余时间</div>
+                </div>
+            </div>
+            <div class="exercise-info">
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="info-label">当前步频</span>
+                        <span class="info-value" id="current-cadence">180</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">已用时间</span>
+                        <span class="info-value" id="elapsed-time">00:00</span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="info-label">预计步数</span>
+                        <span class="info-value" id="estimated-steps">0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">消耗热量</span>
+                        <span class="info-value" id="burned-calories">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="exercise-controls">
+                <button class="control-btn pause-btn" id="pause-exercise">暂停</button>
+                <button class="control-btn stop-btn" id="stop-exercise">结束运动</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/app-core.js"></script>
+    <script src="../js/app-methods.js"></script>
     <script src="../js/app.js"></script>
-    <script>
-        // 初始化应用
-        const app = new SuperSlowRunApp();
-    </script>
 </body>
 </html>
