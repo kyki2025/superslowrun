@@ -220,9 +220,27 @@ body {
     }
 }
 
-.hero-buttons {
+ .hero-buttons {
     display: flex;
     gap: 1rem;
+}
+
+/* 首页快捷入口：超慢跑助手（与其他按钮一致边框样式） */
+/* 使用更高的选择器优先级，避免被后面的 .btn { border: none; } 覆盖 */
+.btn.btn-app {
+    display: inline-flex;
+    align-items: center;
+    background: transparent;
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px 24px;
+}
+.btn.btn-app:hover {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    transform: scale(1.04);
+    box-shadow: var(--shadow-md);
 }
 
 .btn {
@@ -257,6 +275,8 @@ body {
 .btn-secondary:hover {
     border-color: var(--primary-color);
     color: var(--primary-color);
+    transform: scale(1.04);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-outline {
@@ -268,6 +288,8 @@ body {
 .btn-outline:hover {
     background: var(--primary-color);
     color: white;
+    transform: scale(1.04);
+    box-shadow: var(--shadow-md);
 }
 
 /* 浮动卡片 */
