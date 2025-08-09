@@ -225,6 +225,35 @@ body {
     gap: 1rem;
 }
 
+/* 首页快捷入口：超慢跑助手 */
+.btn-app {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 10px 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+.btn-app:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 10px 24px rgba(76, 110, 245, 0.15);
+    transform: translateY(-2px);
+}
+.btn-app-icon {
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6ac1ff, #8a5cff);
+    color: #fff;
+    font-size: 14px;
+}
+
 .btn {
     padding: 12px 24px;
     border-radius: 8px;
