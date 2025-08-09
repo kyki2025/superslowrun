@@ -280,12 +280,13 @@
 
                 this.stats = {
                     totalSessions: 6,
-                    totalTime: 35,
+                    totalTime: 35, // 兼容旧字段（分钟）
+                    totalSeconds: 35 * 60,
                     totalSteps: 6738,
                     totalCalories: 2700,
                     averageBPM: 180,
                     weeklyTarget: 27 * 60,
-                    todayTime: 16 * 60,
+                    todayTime: 16 * 60, // 秒
                     recentActivities: []
                 };
 
@@ -398,15 +399,17 @@
             updateStatsDisplay() {
                 const todayElement = document.getElementById('today-time');
                 if (todayElement) {
-                    const minutes = Math.floor(this.stats.todayTime / 60);
-                    const seconds = this.stats.todayTime % 60;
+                    const tsec = Math.max(0, this.stats.todayTime || 0);
+                    const minutes = Math.floor(tsec / 60);
+                    const seconds = tsec % 60;
                     todayElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
                 }
                 const caloriesElement = document.getElementById('total-calories');
                 if (caloriesElement) caloriesElement.textContent = Math.floor(this.stats.totalCalories).toString();
+                const totalSec = (this.stats.totalSeconds != null) ? this.stats.totalSeconds : Math.round((this.stats.totalTime || 0) * 60);
                 const statsElements = {
                     'sessions-count': this.stats.totalSessions,
-                    'total-duration': this.formatTime(this.stats.totalTime),
+                    'total-duration': this.formatDuration(totalSec),
                     'step-count': this.stats.totalSteps,
                     'avg-cadence': this.stats.averageBPM
                 };
@@ -445,6 +448,18 @@
                 const hours = Math.floor(minutes / 60);
                 const mins = minutes % 60;
                 return `${hours}:${mins.toString().padStart(2, '0')}`;
+            }
+
+            formatDuration(seconds) {
+                const sec = Math.max(0, Math.round(seconds));
+                if (sec < 3600) {
+                    const m = Math.floor(sec / 60);
+                    const s = sec % 60;
+                    return `${m}:${s.toString().padStart(2, '0')}`;
+                }
+                const h = Math.floor(sec / 3600);
+                const m = Math.floor((sec % 3600) / 60);
+                return `${h}:${m.toString().padStart(2, '0')}`;
             }
 
             saveData() {
@@ -747,12 +762,12 @@
 
                 if (saveStats) {
                     const actualSeconds = this.core.state.elapsedTime; // 实际运动时长
-                    const actualMins = Math.max(1, Math.round(actualSeconds / 60));
                     const steps = Math.round((this.core.state.bpm / 60) * actualSeconds);
-                    const calories = Math.round(actualMins * 3);
+                    const calories = Math.round((actualSeconds / 60) * 3);
                     this.core.stats.totalSessions += 1;
-                    this.core.stats.totalTime += actualMins;
-                    this.core.stats.todayTime = (this.core.stats.todayTime || 0) + actualMins * 60;
+                    this.core.stats.totalSeconds = (this.core.stats.totalSeconds || 0) + actualSeconds;
+                    this.core.stats.totalTime = Math.round(this.core.stats.totalSeconds / 60); // 兼容旧字段
+                    this.core.stats.todayTime = (this.core.stats.todayTime || 0) + actualSeconds;
                     this.core.stats.totalSteps += steps;
                     this.core.stats.totalCalories += calories;
                     // 最近记录（保留5条）
