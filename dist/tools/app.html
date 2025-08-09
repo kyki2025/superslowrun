@@ -510,12 +510,15 @@
 
                 // 音量滑块
                 const volumeSlider = document.getElementById('volume-slider');
+                const volumePercent = document.getElementById('volume-percent');
                 if (volumeSlider) {
                     volumeSlider.addEventListener('input', (e) => {
                         const volume = parseFloat(e.target.value) / 100;
                         this.core.state.volume = volume;
+                        if (volumePercent) volumePercent.textContent = `${Math.round(volume * 100)}%`;
                     });
                     volumeSlider.value = this.core.state.volume * 100;
+                    if (volumePercent) volumePercent.textContent = `${Math.round(this.core.state.volume * 100)}%`;
                 }
 
                 // 音效选择按钮
@@ -525,10 +528,49 @@
                         if (soundType && this.core.soundConfigs[soundType]) {
                             this.core.state.currentSound = soundType;
                             this.updateSoundButtons();
+                            const badge = document.querySelector('.badge.green');
+                            if (badge) badge.textContent = `当前音效: ${btn.textContent.trim()}`;
                             this.core.playMetronomeSound();
                         }
                     });
                 });
+
+                // 计时器预设
+                document.querySelectorAll('.time-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const mins = parseInt(btn.dataset.time);
+                        if (mins) {
+                            this.core.state.currentDuration = mins;
+                            const input = document.getElementById('custom-minutes');
+                            if (input) input.value = String(mins);
+                            this.updateTimeButtons();
+                        }
+                    });
+                });
+
+                // 自定义时间输入
+                const customInput = document.getElementById('custom-minutes');
+                if (customInput) {
+                    const onInput = () => {
+                        let v = parseInt(customInput.value || '0');
+                        if (!Number.isFinite(v)) v = this.core.config.defaultDuration;
+                        v = Math.max(1, Math.min(this.core.config.maxDuration, v));
+                        this.core.state.currentDuration = v;
+                        this.updateTimeButtons();
+                    };
+                    customInput.addEventListener('input', onInput);
+                    customInput.addEventListener('change', onInput);
+                }
+
+                // 开始/暂停/结束/关闭
+                const startBtn = document.getElementById('start-exercise');
+                if (startBtn) startBtn.addEventListener('click', () => this.startExercise());
+                const pauseBtn = document.getElementById('pause-exercise');
+                if (pauseBtn) pauseBtn.addEventListener('click', () => this.pauseExercise());
+                const stopBtn = document.getElementById('stop-exercise');
+                if (stopBtn) stopBtn.addEventListener('click', () => this.stopExercise(true));
+                const closeBtn = document.getElementById('close-exercise');
+                if (closeBtn) closeBtn.addEventListener('click', () => this.stopExercise(false));
 
                 // 空格键控制节拍器
                 document.addEventListener('keydown', (e) => {
@@ -554,6 +596,8 @@
                 this.updateMetronomeUI();
                 this.updatePresetButtons();
                 this.updateSoundButtons();
+                this.updateTimeButtons();
+                this.updateExerciseUI();
             }
 
             updateMetronomeUI() {
@@ -611,6 +655,88 @@
                         card.style.transform = 'translateY(0)';
                     }, index * 150);
                 });
+            }
+
+            // ============ 计时器与运动逻辑 ============
+            updateTimeButtons() {
+                const mins = this.core.state.currentDuration;
+                document.querySelectorAll('.time-btn').forEach(b => {
+                    const v = parseInt(b.dataset.time);
+                    if (v === mins) b.classList.add('active'); else b.classList.remove('active');
+                });
+            }
+
+            startExercise() {
+                if (this.core.state.isExerciseRunning) return;
+                this.core.state.isExerciseRunning = true;
+                this.core.state.exercisePaused = false;
+                this.core.state.elapsedTime = 0;
+                const overlay = document.getElementById('exercise-overlay');
+                if (overlay) overlay.style.display = 'flex';
+                // 确保节拍器在运动时可用：保持用户决定
+                this.updateExerciseUI();
+                this.core.timers.exercise = setInterval(() => {
+                    if (!this.core.state.isExerciseRunning || this.core.state.exercisePaused) return;
+                    this.core.state.elapsedTime += 1;
+                    const durationSec = this.core.state.currentDuration * 60;
+                    if (this.core.state.elapsedTime >= durationSec) {
+                        this.stopExercise(true);
+                        return;
+                    }
+                    this.updateExerciseUI();
+                }, 1000);
+            }
+
+            pauseExercise() {
+                if (!this.core.state.isExerciseRunning) return;
+                this.core.state.exercisePaused = !this.core.state.exercisePaused;
+                const pauseBtn = document.getElementById('pause-exercise');
+                if (pauseBtn) pauseBtn.textContent = this.core.state.exercisePaused ? '继续' : '暂停';
+            }
+
+            stopExercise(saveStats) {
+                if (this.core.timers.exercise) {
+                    clearInterval(this.core.timers.exercise);
+                    this.core.timers.exercise = null;
+                }
+                const overlay = document.getElementById('exercise-overlay');
+                if (overlay) overlay.style.display = 'none';
+                if (saveStats) {
+                    const mins = this.core.state.currentDuration;
+                    const steps = Math.round((this.core.state.bpm / 60) * (mins * 60));
+                    this.core.stats.totalSessions += 1;
+                    this.core.stats.totalTime += mins;
+                    this.core.stats.totalSteps += steps;
+                    // 简易卡路里估算（可按需替换）
+                    this.core.stats.totalCalories += Math.round(mins * 3);
+                    this.core.updateStatsDisplay();
+                    this.core.saveData();
+                }
+                this.core.state.isExerciseRunning = false;
+                this.core.state.exercisePaused = false;
+                this.core.state.elapsedTime = 0;
+                this.updateExerciseUI();
+            }
+
+            updateExerciseUI() {
+                const durationSec = this.core.state.currentDuration * 60;
+                const remain = Math.max(0, durationSec - this.core.state.elapsedTime);
+                const display = document.getElementById('exercise-timer-display');
+                if (display) display.textContent = this.formatSeconds(remain);
+                const elapsedEl = document.getElementById('elapsed-time');
+                if (elapsedEl) elapsedEl.textContent = this.formatSeconds(this.core.state.elapsedTime);
+                const stepsEl = document.getElementById('estimated-steps');
+                if (stepsEl) stepsEl.textContent = String(Math.round((this.core.state.bpm / 60) * this.core.state.elapsedTime));
+                const calEl = document.getElementById('burned-calories');
+                if (calEl) calEl.textContent = String(Math.round(this.core.state.elapsedTime * 0.05));
+                const singleBadge = document.querySelector('.badge.purple');
+                if (singleBadge) singleBadge.textContent = `单次: ${this.formatSeconds(this.core.state.elapsedTime)}`;
+            }
+
+            formatSeconds(sec) {
+                const m = Math.floor(sec / 60);
+                const s = sec % 60;
+                return `${m}:${s.toString().padStart(2, '0')}`;
             }
         }
 
