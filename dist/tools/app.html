@@ -29,8 +29,12 @@
                     <div class="bpm-display">
                         <div class="bpm-number" id="bpm-value">180</div>
                         <div class="bpm-unit">步/分</div>
-                        <div class="bpm-range">范围: 170-190</div>
+                        <div class="bpm-range">范围: 100-300</div>
                         <div class="bpm-status" id="bpm-status">中等强度</div>
+                        <div class="custom-bpm-wrap">
+                            <label class="custom-label">自定义步频（100-300）</label>
+                            <input type="number" id="custom-bpm" placeholder="180" min="100" max="300" value="180">
+                        </div>
                     </div>
                     <button class="bpm-btn increase" id="bpm-increase">+</button>
                 </div>
@@ -41,7 +45,7 @@
                 </div>
                 <div class="bpm-tip">
                     <span class="tip-icon">✓</span>
-                    <span class="tip-text">建议步频范围170-190步/分钟</span>
+                    <span class="tip-text">超慢跑最佳节奏（170-190 步/分钟）</span>
                 </div>
             </div>
         </div>
@@ -259,8 +263,8 @@
             constructor() {
                 this.config = {
                     defaultBPM: 180,
-                    minBPM: 170,
-                    maxBPM: 190,
+                    minBPM: 100,
+                    maxBPM: 300,
                     defaultDuration: 15,
                     maxDuration: 999,
                     volumeDefault: 0.65
@@ -534,12 +538,32 @@
                 document.querySelectorAll('.preset-btn').forEach(btn => {
                     btn.addEventListener('click', () => {
                         const bpm = parseInt(btn.dataset.bpm);
-                        if (bpm) {
+                        if (Number.isFinite(bpm)) {
                             this.core.setBPM(bpm);
+                            const input = document.getElementById('custom-bpm');
+                            if (input) input.value = String(this.core.state.bpm);
                             this.updatePresetButtons();
                         }
                     });
                 });
+
+                // 自定义步频输入
+                const customBpm = document.getElementById('custom-bpm');
+                if (customBpm) {
+                    const onBpmInput = () => {
+                        let v = parseInt(customBpm.value || '0');
+                        if (!Number.isFinite(v)) v = this.core.state.bpm;
+                        v = Math.max(this.core.config.minBPM, Math.min(this.core.config.maxBPM, v));
+                        this.core.setBPM(v);
+                        customBpm.value = String(this.core.state.bpm);
+                        this.updatePresetButtons();
+                    };
+                    customBpm.addEventListener('change', onBpmInput);
+                    customBpm.addEventListener('blur', onBpmInput);
+                    customBpm.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') { e.preventDefault(); onBpmInput(); }
+                    });
+                }
 
                 // 节拍器播放按钮
                 const toggleBtn = document.getElementById('metronome-toggle');

@@ -117,85 +117,163 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
-    gap: 24px;
+    margin-bottom: 24px;
+    gap: 32px;
 }
 
 .bpm-btn {
-    width: 44px;
-    height: 44px;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     border: none;
-    background: rgba(78, 205, 196, 0.2);
-    color: #4ECDC4;
-    font-size: 20px;
-    font-weight: 600;
+    color: white;
+    font-size: 28px;
+    font-weight: 400;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.bpm-btn.decrease {
+    background: linear-gradient(135deg, #4A9EFF 0%, #1E88E5 100%);
+}
+
+.bpm-btn.increase {
+    background: linear-gradient(135deg, #E91E63 0%, #9C27B0 100%);
 }
 
 .bpm-btn:hover {
-    background: rgba(78, 205, 196, 0.3);
-    transform: scale(1.05);
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
 }
 
 .bpm-btn:active {
-    transform: scale(0.95);
+    transform: scale(1.05) translateY(0);
 }
 
 .bpm-display {
     text-align: center;
+    position: relative;
 }
 
-.bpm-number {
-    font-size: 48px;
+.bpm-input {
+    background: rgba(30, 40, 60, 0.8);
+    border: 2px solid rgba(78, 205, 196, 0.3);
+    border-radius: 16px;
+    padding: 16px 24px;
+    font-size: 64px;
     font-weight: 700;
     color: #4ECDC4;
+    text-align: center;
+    width: 180px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    outline: none;
     line-height: 1;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+}
+
+.bpm-input:focus {
+    border-color: #4ECDC4;
+    box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.2);
+    transform: scale(1.02);
 }
 
 .bpm-unit {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 2px;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 6px;
+    font-weight: 500;
 }
 
 .bpm-range {
-    font-size: 12px;
+    font-size: 13px;
     color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 6px;
+    margin-bottom: 20px;
 }
 
-.bpm-status {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.7);
-    background: rgba(255, 255, 255, 0.1);
-    padding: 4px 8px;
-    border-radius: 8px;
-    display: inline-block;
+.quick-presets {
+    margin-bottom: 20px;
+}
+
+.presets-label {
+    display: block;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 12px;
+    font-weight: 500;
 }
 
 .preset-buttons {
     display: flex;
-    gap: 8px;
+    gap: 12px;
     justify-content: center;
-    margin-bottom: 16px;
 }
 
 .preset-btn {
-    padding: 8px 16px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.1);
+    padding: 12px 24px;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
     color: rgba(255, 255, 255, 0.9);
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    min-width: 64px;
+}
+
+.preset-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.preset-btn.active {
+    background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+    border-color: #4ECDC4;
+    color: white;
+    box-shadow: 0 4px 20px rgba(78, 205, 196, 0.4);
+}
+
+.bpm-tip {
+    background: rgba(76, 175, 80, 0.15);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    backdrop-filter: blur(10px);
+}
+
+.tip-icon {
+    font-size: 16px;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.tip-text {
+    font-size: 14px;
+    color: #4CAF50;
+    font-weight: 600;
+    margin: 0;
+}
+
+.tip-description {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    line-height: 1.4;
 }
 
 .preset-btn.active {

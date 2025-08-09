@@ -25,23 +25,26 @@
             </div>
             <div class="bpm-section">
                 <div class="bpm-controls">
-                    <button class="bpm-btn decrease" id="bpm-decrease">-</button>
+                    <button class="bpm-btn decrease" id="bpm-decrease">−</button>
                     <div class="bpm-display">
-                        <div class="bpm-number" id="bpm-value">180</div>
-                        <div class="bpm-unit">步/分</div>
-                        <div class="bpm-range">范围: 170-190</div>
-                        <div class="bpm-status" id="bpm-status">中等强度</div>
+                        <input type="number" class="bpm-input" id="bpm-input" value="190" min="100" max="300">
+                        <div class="bpm-unit">步/分钟</div>
+                        <div class="bpm-range">范围: 100-300</div>
                     </div>
                     <button class="bpm-btn increase" id="bpm-increase">+</button>
                 </div>
-                <div class="preset-buttons">
-                    <button class="preset-btn" data-bpm="170">170</button>
-                    <button class="preset-btn active" data-bpm="180">180</button>
-                    <button class="preset-btn" data-bpm="190">190</button>
+                <div class="quick-presets">
+                    <span class="presets-label">快速设置</span>
+                    <div class="preset-buttons">
+                        <button class="preset-btn" data-bpm="170">170</button>
+                        <button class="preset-btn" data-bpm="180">180</button>
+                        <button class="preset-btn active" data-bpm="190">190</button>
+                    </div>
                 </div>
                 <div class="bpm-tip">
                     <span class="tip-icon">✓</span>
-                    <span class="tip-text">建议步频范围170-190步/分钟</span>
+                    <span class="tip-text">推荐范围</span>
+                    <div class="tip-description">超慢跑最佳节奏 (170-190 步/分钟)</div>
                 </div>
             </div>
         </div>
@@ -258,9 +261,9 @@
         class SuperSlowRunCore {
             constructor() {
                 this.config = {
-                    defaultBPM: 180,
-                    minBPM: 170,
-                    maxBPM: 190,
+                    defaultBPM: 190,
+                    minBPM: 100,
+                    maxBPM: 300,
                     defaultDuration: 15,
                     maxDuration: 999,
                     volumeDefault: 0.65
@@ -534,12 +537,52 @@
                 document.querySelectorAll('.preset-btn').forEach(btn => {
                     btn.addEventListener('click', () => {
                         const bpm = parseInt(btn.dataset.bpm);
-                        if (bpm) {
+                        if (Number.isFinite(bpm)) {
                             this.core.setBPM(bpm);
+                            const input = document.getElementById('custom-bpm');
+                            if (input) input.value = String(this.core.state.bpm);
                             this.updatePresetButtons();
                         }
                     });
                 });
+
+                // BPM输入框处理
+                const bpmInput = document.getElementById('bpm-input');
+                if (bpmInput) {
+                    const onBpmInput = () => {
+                        let v = parseInt(bpmInput.value || '0');
+                        if (!Number.isFinite(v) || v < this.core.config.minBPM) {
+                            v = this.core.config.minBPM;
+                        } else if (v > this.core.config.maxBPM) {
+                            v = this.core.config.maxBPM;
+                        }
+                        this.core.setBPM(v);
+                        bpmInput.value = String(this.core.state.bpm);
+                        this.updatePresetButtons();
+                    };
+                    
+                    bpmInput.addEventListener('input', (e) => {
+                        // 实时更新但不强制限制
+                        let v = parseInt(e.target.value || '0');
+                        if (Number.isFinite(v)) {
+                            this.core.state.bpm = Math.max(this.core.config.minBPM, Math.min(this.core.config.maxBPM, v));
+                            this.updateBPMDisplays();
+                            this.updatePresetButtons();
+                        }
+                    });
+                    
+                    bpmInput.addEventListener('change', onBpmInput);
+                    bpmInput.addEventListener('blur', onBpmInput);
+                    bpmInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            onBpmInput();
+                        }
+                    });
+                    
+                    // 设置初始值
+                    bpmInput.value = String(this.core.state.bpm);
+                }
 
                 // 节拍器播放按钮
                 const toggleBtn = document.getElementById('metronome-toggle');
@@ -661,6 +704,17 @@
                     }
                     if (statusElement) statusElement.textContent = '点击播放';
                 }
+            }
+
+            updateBPMDisplays() {
+                // 更新所有BPM显示元素，包括输入框
+                const bpmInput = document.getElementById('bpm-input');
+                if (bpmInput && bpmInput !== document.activeElement) {
+                    bpmInput.value = String(this.core.state.bpm);
+                }
+                
+                // 更新其他BPM显示元素
+                this.core.updateBPMDisplay();
             }
 
             updatePresetButtons() {
