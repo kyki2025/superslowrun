@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面未找到 - 超慢跑</title>
+    <meta name="description" content="抱歉，您访问的页面不存在。返回超慢跑首页继续探索专业的超慢跑训练工具和健康知识。">
+    <meta name="robots" content="noindex,follow">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://superslow.run/" />
+    
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        .error-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .error-content {
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .error-number {
+            font-size: 8rem;
+            font-weight: 700;
+            margin: 0;
+            opacity: 0.8;
+            line-height: 1;
+        }
+        
+        .error-title {
+            font-size: 2rem;
+            margin: 1rem 0;
+            font-weight: 600;
+        }
+        
+        .error-description {
+            font-size: 1.1rem;
+            margin: 1.5rem 0 2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .error-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .error-btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .error-btn.primary {
+            background: white;
+            color: #667eea;
+        }
+        
+        .error-btn.secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .error-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .popular-links {
+            margin-top: 3rem;
+        }
+        
+        .popular-links h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+        
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .link-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .link-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .link-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .link-title {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .error-number {
+                font-size: 6rem;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .error-btn {
+                min-width: 200px;
+            }
+            
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-content">
+            <h1 class="error-number">404</h1>
+            <h2 class="error-title">页面未找到</h2>
+            <p class="error-description">
+                抱歉，您访问的页面不存在或已被移动。<br>
+                让我们帮您找到您想要的内容！
+            </p>
+            
+            <div class="error-actions">
+                <a href="/" class="error-btn primary">
+                    🏠 返回首页
+                </a>
+                <button onclick="history.back()" class="error-btn secondary">
+                    ← 返回上页
+                </button>
+            </div>
+            
+            <div class="popular-links">
+                <h3>热门功能</h3>
+                <div class="links-grid">
+                    <a href="/tools/app.html" class="link-card">
+                        <span class="link-icon">🎵</span>
+                        <div class="link-title">超慢跑助手</div>
+                    </a>
+                    <a href="/tools/app-pro.html" class="link-card">
+                        <span class="link-icon">⚡</span>
+                        <div class="link-title">专业应用</div>
+                    </a>
+                    <a href="/tools/checkin.html" class="link-card">
+                        <span class="link-icon">📅</span>
+                        <div class="link-title">打卡记录</div>
+                    </a>
+                    <a href="/tools/calculator.html" class="link-card">
+                        <span class="link-icon">🔥</span>
+                        <div class="link-title">卡路里计算</div>
+                    </a>
+                    <a href="/blog.html" class="link-card">
+                        <span class="link-icon">📖</span>
+                        <div class="link-title">训练博客</div>
+                    </a>
+                    <a href="/#about" class="link-card">
+                        <span class="link-icon">💪</span>
+                        <div class="link-title">了解超慢跑</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 记录404错误用于分析
+        if (window.gtag) {
+            gtag('event', 'page_view', {
+                'page_title': '404 Not Found',
+                'page_location': window.location.href
+            });
+        }
+        
+        // 自动跳转逻辑（可选）
+        const currentPath = window.location.pathname;
+        const redirectMap = {
+            '/app': '/tools/app.html',
+            '/calculator': '/tools/calculator.html',
+            '/checkin': '/tools/checkin.html',
+            '/tools': '/#tools',
+            '/about': '/#about'
+        };
+        
+        if (redirectMap[currentPath]) {
+            setTimeout(() => {
+                window.location.href = redirectMap[currentPath];
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
