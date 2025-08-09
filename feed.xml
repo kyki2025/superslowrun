@@ -7,8 +7,8 @@
     <atom:link href="https://superslow.run/feed.xml" rel="self" type="application/rss+xml" />
     <language>zh-CN</language>
     <copyright>© 2025 超慢跑团队</copyright>
-    <managingEditor>info@superslowrun.com (超慢跑团队)</managingEditor>
-    <webMaster>info@superslowrun.com (超慢跑团队)</webMaster>
+    <managingEditor>info@superslow.run (超慢跑团队)</managingEditor>
+    <webMaster>info@superslow.run (超慢跑团队)</webMaster>
     <lastBuildDate>Wed, 15 Jan 2025 00:00:00 GMT</lastBuildDate>
     <category>健康运动</category>
     <ttl>1440</ttl>
@@ -20,7 +20,7 @@
       <guid isPermaLink="true">https://superslow.run/blog/beginners-guide.html</guid>
       <pubDate>Wed, 15 Jan 2025 00:00:00 GMT</pubDate>
       <category>训练技巧</category>
-      <author>info@superslowrun.com (超慢跑团队)</author>
+      <author>info@superslow.run (超慢跑团队)</author>
     </item>
 
     <item>
@@ -30,7 +30,7 @@
       <guid isPermaLink="true">https://superslow.run/blog/nutrition-guide.html</guid>
       <pubDate>Sun, 12 Jan 2025 00:00:00 GMT</pubDate>
       <category>营养建议</category>
-      <author>info@superslowrun.com (超慢跑团队)</author>
+      <author>info@superslow.run (超慢跑团队)</author>
     </item>
 
     <item>
@@ -40,7 +40,7 @@
       <guid isPermaLink="true">https://superslow.run/blog/30-day-challenge.html</guid>
       <pubDate>Fri, 10 Jan 2025 00:00:00 GMT</pubDate>
       <category>成功案例</category>
-      <author>info@superslowrun.com (超慢跑团队)</author>
+      <author>info@superslow.run (超慢跑团队)</author>
     </item>
 
     <item>
@@ -50,7 +50,7 @@
       <guid isPermaLink="true">https://superslow.run/blog/cardiovascular-health.html</guid>
       <pubDate>Wed, 08 Jan 2025 00:00:00 GMT</pubDate>
       <category>科学研究</category>
-      <author>info@superslowrun.com (超慢跑团队)</author>
+      <author>info@superslow.run (超慢跑团队)</author>
     </item>
 
     <item>
@@ -60,7 +60,7 @@
       <guid isPermaLink="true">https://superslow.run/blog/training-plan.html</guid>
       <pubDate>Sun, 05 Jan 2025 00:00:00 GMT</pubDate>
       <category>训练技巧</category>
-      <author>info@superslowrun.com (超慢跑团队)</author>
+      <author>info@superslow.run (超慢跑团队)</author>
     </item>
 
     <item>
@@ -70,7 +70,7 @@
       <guid isPermaLink="true">https://superslow.run/blog/weight-loss-diet.html</guid>
       <pubDate>Fri, 03 Jan 2025 00:00:00 GMT</pubDate>
       <category>营养建议</category>
-      <author>info@superslowrun.com (超慢跑团队)</author>
+      <author>info@superslow.run (超慢跑团队)</author>
     </item>
 
   </channel>
