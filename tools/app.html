@@ -248,6 +248,12 @@
         </div>
     </div>
 
+    <script>
+        // 避免重复声明的临时修复
+        window.SuperSlowRunCore = window.SuperSlowRunCore || class {};
+        window.SuperSlowRunMethods = window.SuperSlowRunMethods || class {};
+        window.SuperSlowRunApp = window.SuperSlowRunApp || class {};
+    </script>
     <script src="../js/app-core.js"></script>
     <script src="../js/app-methods.js"></script>
     <script src="../js/app.js"></script>
