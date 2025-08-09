@@ -226,7 +226,8 @@ body {
 }
 
 /* 首页快捷入口：超慢跑助手（与其他按钮一致边框样式） */
-.btn-app {
+/* 使用更高的选择器优先级，避免被后面的 .btn { border: none; } 覆盖 */
+.btn.btn-app {
     display: inline-flex;
     align-items: center;
     background: transparent;
@@ -235,8 +236,8 @@ body {
     border-radius: 12px;
     padding: 12px 24px;
 }
-.btn-app:hover {
-    border-color: var(--primary-color);
+.btn.btn-app:hover {
+    border: 2px solid var(--primary-color);
     color: var(--primary-color);
     transform: scale(1.04);
     box-shadow: var(--shadow-md);
