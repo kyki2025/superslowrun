@@ -17,6 +17,10 @@
     --bg-secondary: #f9fafb;
     --bg-dark: #111827;
     --border-color: #e5e7eb;
+    --nav-bg: rgba(255, 255, 255, 0.95);
+    --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    --card-bg: #ffffff;
+    --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
@@ -126,6 +130,7 @@ body {
     position: relative;
     background: var(--bg-gradient);
     overflow: hidden;
+    padding-top: 70px; /* 为固定导航栏预留空间 */
 }
 
 .hero-container {
@@ -759,6 +764,11 @@ body {
     
     .nav-menu {
         display: none;
+    }
+    
+    /* 确保手机端首页内容不被导航栏遮挡 */
+    .hero {
+        padding-top: 90px; /* 手机端增加更多上边距 */
     }
     
     .hero-container {
